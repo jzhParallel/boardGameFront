@@ -1,0 +1,50 @@
+// ===== 颜色系统 =====
+$color-primary: #2D5A45;        // 深墨绿 - 主色
+$color-primary-light: #3D7A5F;  // 浅墨绿
+$color-primary-dark: #1E3D2F;   // 深墨绿暗色
+$color-secondary: #A0714F;      // 暖木色 - 辅助色
+$color-secondary-light: #C49A6C; // 浅木色
+$color-accent: #E8A838;         // 金色强调
+
+$color-bg: #FAF6F0;             // 米白背景
+$color-bg-card: #FFFFFF;        // 卡片背景
+$color-bg-grey: #F5F2ED;       // 灰色背景块
+
+$color-text: #2C2C2C;           // 主文字
+$color-text-secondary: #666666; // 次要文字
+$color-text-light: #999999;     // 浅色文字
+$color-text-white: #FFFFFF;     // 白色文字
+
+$color-border: #E8E2DA;         // 边框色
+$color-divider: #F0EBE4;        // 分割线
+
+$color-success: #52C41A;        // 成功
+$color-warning: #FAAD14;        // 警告
+$color-error: #FF4D4F;          // 错误
+$color-info: #1890FF;           // 信息
+
+// ===== 间距 =====
+$spacing-xs: 8rpx;
+$spacing-sm: 16rpx;
+$spacing-md: 24rpx;
+$spacing-lg: 32rpx;
+$spacing-xl: 48rpx;
+
+// ===== 圆角 =====
+$radius-sm: 8rpx;
+$radius-md: 16rpx;
+$radius-lg: 24rpx;
+$radius-round: 999rpx;
+
+// ===== 字号 =====
+$font-xs: 20rpx;
+$font-sm: 24rpx;
+$font-md: 28rpx;
+$font-lg: 32rpx;
+$font-xl: 36rpx;
+$font-xxl: 44rpx;
+
+// ===== 阴影 =====
+$shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);

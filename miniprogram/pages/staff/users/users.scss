@@ -1,0 +1,49 @@
+@import '../../../styles/variables.scss';
+
+.page-scroll { height: 100vh; }
+
+.user-list {
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+.user-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: $color-primary;
+  color: $color-text-white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-lg;
+  font-weight: 600;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.user-info { flex: 1; }
+
+.user-name {
+  display: block;
+  font-size: $font-md;
+  font-weight: 600;
+  color: $color-text;
+  margin-bottom: 6rpx;
+}
+
+.user-meta {
+  font-size: $font-sm;
+  color: $color-text-light;
+}

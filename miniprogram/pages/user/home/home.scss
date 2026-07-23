@@ -1,0 +1,169 @@
+@import '../../../styles/variables.scss';
+
+.page-scroll {
+  height: 100vh;
+  padding-bottom: 130rpx;
+}
+
+/* 店铺头部 */
+.store-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, $color-primary, $color-primary-light);
+  padding: $spacing-xl $spacing-lg;
+  margin: $spacing-lg;
+  border-radius: $radius-lg;
+  color: $color-text-white;
+}
+
+.store-info {
+  flex: 1;
+}
+
+.store-name {
+  font-size: $font-xxl;
+  font-weight: 700;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.store-meta {
+  margin-bottom: 8rpx;
+}
+
+.meta-item {
+  font-size: $font-sm;
+  opacity: 0.85;
+}
+
+.store-badge {
+  width: 100rpx;
+  height: 100rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-icon {
+  font-size: 56rpx;
+}
+
+/* 区块 */
+.section {
+  padding: 0 $spacing-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+  font-size: $font-lg;
+  font-weight: 600;
+  color: $color-text;
+}
+
+.idle-count {
+  font-size: $font-sm;
+  font-weight: 400;
+  color: $color-primary;
+}
+
+/* 空间横滑 */
+.space-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.space-list {
+  display: inline-flex;
+  gap: $spacing-md;
+  padding: 4rpx;
+}
+
+.space-card {
+  display: inline-flex;
+  flex-direction: column;
+  width: 200rpx;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  background: $color-bg-card;
+  box-shadow: $shadow-sm;
+
+  &.idle {
+    border-left: 6rpx solid $color-success;
+  }
+
+  &.busy {
+    border-left: 6rpx solid $color-border;
+    opacity: 0.7;
+  }
+}
+
+.space-name {
+  font-size: $font-md;
+  font-weight: 600;
+  color: $color-text;
+  margin-bottom: 6rpx;
+}
+
+.space-type {
+  font-size: $font-xs;
+  color: $color-text-secondary;
+  margin-bottom: 6rpx;
+}
+
+.space-status {
+  font-size: $font-xs;
+  color: $color-primary;
+  margin-bottom: 4rpx;
+}
+
+.space-capacity {
+  font-size: $font-xs;
+  color: $color-text-light;
+}
+
+/* 快捷入口 */
+.quick-actions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.action-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-lg $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.action-icon {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(45, 90, 69, 0.08);
+  border-radius: 50%;
+  font-size: 40rpx;
+  color: $color-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.action-text {
+  font-size: $font-sm;
+  color: $color-text;
+  font-weight: 500;
+}

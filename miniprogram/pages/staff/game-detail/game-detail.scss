@@ -1,0 +1,58 @@
+@import '../../../styles/variables.scss';
+
+.page-scroll { height: 100vh; }
+
+.detail-card {
+  margin: $spacing-lg;
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+.game-name {
+  display: block;
+  font-size: $font-xl;
+  font-weight: 700;
+  color: $color-text;
+  margin-bottom: $spacing-lg;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+  &:last-child { border-bottom: none; }
+}
+
+.label {
+  font-size: $font-md;
+  color: $color-text-secondary;
+}
+
+.value {
+  font-size: $font-md;
+  color: $color-text;
+  font-weight: 500;
+}
+
+.action-area {
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.action-btn {
+  text-align: center;
+  padding: $spacing-md;
+}
+
+.loading-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+  color: $color-text-light;
+}

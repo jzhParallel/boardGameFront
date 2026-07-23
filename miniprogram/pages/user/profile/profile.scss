@@ -1,0 +1,152 @@
+@import '../../../styles/variables.scss';
+
+.page-scroll {
+  height: 100vh;
+  padding-bottom: 130rpx;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-xl 0;
+  background: linear-gradient(135deg, $color-primary, $color-primary-light);
+}
+
+.avatar-wrap {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $spacing-md;
+}
+
+.avatar-text {
+  font-size: $font-xxl;
+  color: $color-text-white;
+  font-weight: 700;
+}
+
+.nickname {
+  font-size: $font-xl;
+  color: $color-text-white;
+  font-weight: 600;
+}
+
+/* 店员入口 */
+.staff-entry {
+  display: flex;
+  align-items: center;
+  margin: $spacing-lg;
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.entry-icon {
+  font-size: 40rpx;
+  margin-right: $spacing-md;
+}
+
+.entry-text {
+  flex: 1;
+  font-size: $font-md;
+  font-weight: 500;
+  color: $color-text;
+}
+
+.entry-arrow {
+  font-size: 40rpx;
+  color: $color-text-light;
+}
+
+/* 订单列表 */
+.section {
+  padding: 0 $spacing-lg;
+}
+
+.section-title {
+  font-size: $font-lg;
+  font-weight: 600;
+  color: $color-text;
+  margin-bottom: $spacing-md;
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.order-card {
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+}
+
+.order-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.order-name {
+  font-size: $font-md;
+  font-weight: 600;
+  color: $color-text;
+}
+
+.order-status {
+  font-size: $font-sm;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+
+  &.status-0 {
+    background: rgba(82, 196, 26, 0.1);
+    color: $color-success;
+  }
+
+  &.status-1 {
+    background: rgba(24, 144, 255, 0.1);
+    color: $color-info;
+  }
+
+  &.status-2 {
+    background: rgba(255, 77, 79, 0.1);
+    color: $color-error;
+  }
+}
+
+.order-info {
+  font-size: $font-sm;
+  color: $color-text-secondary;
+  margin-bottom: 4rpx;
+}
+
+/* 退出 */
+.logout-area {
+  padding: $spacing-xl $spacing-lg;
+}
+
+.logout-btn {
+  text-align: center;
+  padding: $spacing-md;
+  color: $color-error;
+  font-size: $font-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+
+  &:active {
+    opacity: 0.7;
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "game-card": "/components/game-card/game-card",
+    "empty-state": "/components/empty-state/empty-state"
+  },
+  "navigationBarTitleText": "桌游"
+}

@@ -1,0 +1,20 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <block wx:if="{{game || storeGame}}">
+    <view class="detail-card">
+      <text class="game-name">{{game.gameName || '桌游详情'}}</text>
+      <view class="info-row"><text class="label">分类</text><text class="value">{{game.category || '-'}}</text></view>
+      <view class="info-row"><text class="label">存放位置</text><text class="value">{{storeGame.location || '未设置'}}</text></view>
+      <view class="info-row"><text class="label">库存数量</text><text class="value">{{storeGame.quantity || 0}}</text></view>
+      <view class="info-row" wx:if="{{game}}"><text class="label">人数</text><text class="value">{{game.minPlayers}}-{{game.maxPlayers}}人</text></view>
+      <view class="info-row" wx:if="{{game}}"><text class="label">时长</text><text class="value">{{game.playTime}}分钟</text></view>
+    </view>
+
+    <view class="action-area">
+      <view class="btn-primary action-btn" bindtap="onLend"><text>借出</text></view>
+      <view class="btn-secondary action-btn" bindtap="onReturn"><text>归还</text></view>
+      <view class="btn-outline action-btn" bindtap="onScan"><text>扫码借还</text></view>
+    </view>
+  </block>
+
+  <view wx:if="{{loading}}" class="loading-wrap"><text>加载中...</text></view>
+</scroll-view>

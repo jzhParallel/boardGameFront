@@ -1,0 +1,121 @@
+@import './styles/variables.scss';
+
+page {
+  background-color: $color-bg;
+  color: $color-text;
+  font-size: $font-md;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+}
+
+/* 通用容器 */
+.container {
+  padding: $spacing-lg;
+  box-sizing: border-box;
+}
+
+/* 卡片样式 */
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-sm;
+  margin-bottom: $spacing-md;
+}
+
+/* 按钮基础 */
+.btn-primary {
+  background: $color-primary;
+  color: $color-text-white;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  text-align: center;
+  font-size: $font-md;
+  border: none;
+  line-height: 1.5;
+
+  &::after {
+    border: none;
+  }
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.btn-secondary {
+  background: $color-secondary;
+  color: $color-text-white;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  text-align: center;
+  font-size: $font-md;
+  border: none;
+  line-height: 1.5;
+
+  &::after {
+    border: none;
+  }
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  color: $color-primary;
+  border: 2rpx solid $color-primary;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  text-align: center;
+  font-size: $font-md;
+  line-height: 1.5;
+
+  &::after {
+    border: none;
+  }
+
+  &:active {
+    background: rgba(45, 90, 69, 0.05);
+  }
+}
+
+/* 标签 */
+.tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+  font-size: $font-xs;
+  background: $color-bg-grey;
+  color: $color-text-secondary;
+}
+
+.tag-primary {
+  background: rgba(45, 90, 69, 0.1);
+  color: $color-primary;
+}
+
+.tag-secondary {
+  background: rgba(160, 113, 79, 0.1);
+  color: $color-secondary;
+}
+
+/* 分割线 */
+.divider {
+  height: 1rpx;
+  background: $color-divider;
+  margin: $spacing-md 0;
+}
+
+/* 文字省略 */
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 安全区域底部 */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}

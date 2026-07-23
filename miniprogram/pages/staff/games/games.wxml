@@ -1,0 +1,36 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <!-- 搜索 + 扫码 -->
+  <view class="top-bar">
+    <view class="search-wrap">
+      <input class="search-input" placeholder="搜索桌游..." value="{{keyword}}" bindinput="onSearchInput" />
+    </view>
+    <view class="scan-btn" bindtap="onScan">
+      <text>扫码</text>
+    </view>
+  </view>
+
+  <!-- 桌游列表 -->
+  <view class="game-list">
+    <view
+      wx:for="{{games}}"
+      wx:key="id"
+      wx:if="{{!keyword || item.gameName.indexOf(keyword) > -1}}"
+      class="game-item"
+      data-id="{{item.id}}"
+      bindtap="onGameTap"
+    >
+      <view class="game-info">
+        <text class="game-name">{{item.gameName}}</text>
+        <view class="game-meta">
+          <text wx:if="{{item.category}}" class="tag tag-primary">{{item.category}}</text>
+          <text class="location">{{item.location || '未设置位置'}}</text>
+        </view>
+      </view>
+      <view class="game-stock {{item.quantity > 0 ? 'in' : 'out'}}">
+        <text>{{item.quantity > 0 ? '库存 ' + item.quantity : '无库存'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <empty-state wx:if="{{!games.length && !loading}}" text="暂无桌游库存" icon="📦" />
+</scroll-view>

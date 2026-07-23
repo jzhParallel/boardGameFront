@@ -1,0 +1,59 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <!-- 开单按钮 -->
+  <view class="top-bar">
+    <view class="btn-primary create-btn" bindtap="onShowCreate">+ 快速开单</view>
+  </view>
+
+  <!-- 订单列表 -->
+  <view class="order-list" wx:if="{{orders.length}}">
+    <view wx:for="{{orders}}" wx:key="id" class="order-card">
+      <view class="order-header">
+        <text class="customer-name">{{item.customerName}}</text>
+        <text class="status-tag status-{{item.status}}">{{statusMap[item.status]}}</text>
+      </view>
+      <view class="order-body">
+        <text class="order-time">{{item.startTime}} ~ {{item.endTime}}</text>
+        <text class="order-amount" wx:if="{{item.totalAmount}}">¥{{item.totalAmount}}</text>
+      </view>
+      <view class="order-actions" wx:if="{{item.status === 0}}">
+        <view class="act-btn complete" data-id="{{item.id}}" bindtap="onComplete"><text>完成</text></view>
+        <view class="act-btn cancel" data-id="{{item.id}}" bindtap="onCancel"><text>取消</text></view>
+      </view>
+    </view>
+  </view>
+
+  <empty-state wx:if="{{!orders.length && !loading}}" text="今日暂无预约，去喝杯茶吧~" icon="☕" />
+
+  <!-- 开单弹窗 -->
+  <view wx:if="{{showCreate}}" class="modal-mask" bindtap="onCloseCreate">
+    <view class="modal-content" catchtap="">
+      <text class="modal-title">快速开单</text>
+      <view class="form-item">
+        <text class="form-label">客户名称</text>
+        <input class="form-input" placeholder="输入客户名称" data-field="customerName" bindinput="onFormInput" value="{{form.customerName}}" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">选择空间</text>
+        <picker range="{{spaces}}" range-key="spaceName" bindchange="onSpaceChange">
+          <view class="form-input picker">{{form.spaceId ? '已选择' : '请选择空间'}}</view>
+        </picker>
+      </view>
+      <view class="form-item">
+        <text class="form-label">开始时间</text>
+        <input class="form-input" placeholder="如 2025-01-01T10:00:00" data-field="startTime" bindinput="onFormInput" value="{{form.startTime}}" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">结束时间</text>
+        <input class="form-input" placeholder="如 2025-01-01T12:00:00" data-field="endTime" bindinput="onFormInput" value="{{form.endTime}}" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">金额</text>
+        <input class="form-input" type="digit" placeholder="0" data-field="totalAmount" bindinput="onFormInput" value="{{form.totalAmount}}" />
+      </view>
+      <view class="modal-btns">
+        <view class="modal-btn cancel" bindtap="onCloseCreate"><text>取消</text></view>
+        <view class="modal-btn confirm" bindtap="onCreateSubmit"><text>确认开单</text></view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

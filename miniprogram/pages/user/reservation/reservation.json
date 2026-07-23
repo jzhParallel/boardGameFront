@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "time-grid": "/components/time-grid/time-grid",
+    "empty-state": "/components/empty-state/empty-state"
+  },
+  "navigationBarTitleText": "预约"
+}

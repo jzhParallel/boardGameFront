@@ -1,0 +1,68 @@
+@import '../../../styles/variables.scss';
+
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.disclaimer {
+  text-align: center;
+  padding: $spacing-sm;
+  background: rgba(232, 168, 56, 0.1);
+  font-size: $font-xs;
+  color: $color-secondary;
+}
+
+.message-list {
+  flex: 1;
+  overflow: hidden;
+}
+
+.messages-inner {
+  padding: $spacing-lg 0;
+  padding-bottom: 130rpx;
+}
+
+.input-area {
+  position: fixed;
+  bottom: 110rpx;
+  left: 0;
+  right: 0;
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-card;
+  border-top: 1rpx solid $color-divider;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  background: $color-bg-grey;
+  border-radius: $radius-round;
+  padding: $spacing-xs $spacing-xs $spacing-xs $spacing-lg;
+}
+
+.msg-input {
+  flex: 1;
+  font-size: $font-md;
+  color: $color-text;
+  height: 64rpx;
+}
+
+.send-btn {
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-round;
+  background: $color-border;
+  color: $color-text-light;
+  font-size: $font-sm;
+  transition: all 0.2s;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}

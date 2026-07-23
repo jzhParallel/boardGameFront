@@ -1,0 +1,129 @@
+@import '../../../styles/variables.scss';
+
+.page-scroll {
+  height: 100vh;
+  padding-bottom: 130rpx;
+}
+
+.section {
+  padding: $spacing-lg;
+  padding-bottom: 0;
+}
+
+.section-title {
+  font-size: $font-lg;
+  font-weight: 600;
+  color: $color-text;
+  margin-bottom: $spacing-md;
+}
+
+/* 日期选择 */
+.date-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.date-list {
+  display: inline-flex;
+  gap: $spacing-sm;
+  padding: 4rpx;
+}
+
+.date-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-md;
+  background: $color-bg-card;
+  box-shadow: $shadow-sm;
+  min-width: 120rpx;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+
+    .date-label, .date-value {
+      color: $color-text-white;
+    }
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.date-label {
+  font-size: $font-md;
+  font-weight: 600;
+  color: $color-text;
+  margin-bottom: 4rpx;
+}
+
+.date-value {
+  font-size: $font-xs;
+  color: $color-text-light;
+}
+
+/* 空间选择 */
+.space-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+}
+
+.space-item {
+  width: calc(50% - 12rpx);
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  background: $color-bg-card;
+  box-shadow: $shadow-sm;
+  border: 2rpx solid transparent;
+
+  &.active {
+    border-color: $color-primary;
+    background: rgba(45, 90, 69, 0.05);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.space-name {
+  display: block;
+  font-size: $font-md;
+  font-weight: 600;
+  color: $color-text;
+  margin-bottom: 6rpx;
+}
+
+.space-type {
+  display: block;
+  font-size: $font-sm;
+  color: $color-text-secondary;
+  margin-bottom: 4rpx;
+}
+
+.space-cap {
+  display: block;
+  font-size: $font-xs;
+  color: $color-text-light;
+}
+
+/* 提交 */
+.submit-area {
+  padding: $spacing-xl $spacing-lg;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: $font-lg;
+}

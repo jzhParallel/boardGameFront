@@ -1,0 +1,48 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <!-- 用户信息 -->
+  <view class="profile-header">
+    <view class="avatar-wrap">
+      <text class="avatar-text">{{nickname[0] || '游'}}</text>
+    </view>
+    <text class="nickname">{{nickname}}</text>
+  </view>
+
+  <!-- 店员入口 -->
+  <view class="staff-entry" wx:if="{{showStaffEntry}}" bindtap="onGoStaff">
+    <text class="entry-icon">🛠</text>
+    <text class="entry-text">店员工作台</text>
+    <text class="entry-arrow">›</text>
+  </view>
+  <view class="staff-entry" wx:else bindtap="onStaffLogin">
+    <text class="entry-icon">🔑</text>
+    <text class="entry-text">店员登录</text>
+    <text class="entry-arrow">›</text>
+  </view>
+
+  <!-- 我的预约 -->
+  <view class="section">
+    <view class="section-title"><text>我的预约</text></view>
+    <view wx:if="{{orders.length}}" class="order-list">
+      <view wx:for="{{orders}}" wx:key="id" class="order-card">
+        <view class="order-top">
+          <text class="order-name">{{item.customerName}}</text>
+          <text class="order-status status-{{item.status}}">{{statusMap[item.status]}}</text>
+        </view>
+        <view class="order-info">
+          <text>{{item.startTime}} ~ {{item.endTime}}</text>
+        </view>
+        <view class="order-info" wx:if="{{item.remark}}">
+          <text>备注：{{item.remark}}</text>
+        </view>
+      </view>
+    </view>
+    <empty-state wx:else text="暂无预约记录，快去预约吧~" icon="📋" btn-text="去预约" />
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-area">
+    <view class="logout-btn" bindtap="onLogout">
+      <text>退出登录</text>
+    </view>
+  </view>
+</scroll-view>

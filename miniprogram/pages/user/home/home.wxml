@@ -1,0 +1,58 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <!-- 店铺信息卡片 -->
+  <view class="store-header">
+    <view class="store-info">
+      <text class="store-name">{{store.storeName || '桌游空间'}}</text>
+      <view class="store-meta">
+        <text class="meta-item">{{store.address || '加载中...'}}</text>
+      </view>
+      <view class="store-meta">
+        <text class="meta-item">营业时间：{{store.businessHours || '10:00-22:00'}}</text>
+      </view>
+      <view class="store-meta">
+        <text class="meta-item">电话：{{store.phone || '-'}}</text>
+      </view>
+    </view>
+    <view class="store-badge">
+      <text class="badge-icon">♟</text>
+    </view>
+  </view>
+
+  <!-- 今日空闲速览 -->
+  <view class="section">
+    <view class="section-title">
+      <text>今日空闲</text>
+      <text class="idle-count">{{idleCount}} 个空间可用</text>
+    </view>
+    <scroll-view class="space-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="space-list">
+        <view wx:for="{{spaces}}" wx:key="id" class="space-card {{item.status === 0 ? 'idle' : 'busy'}}">
+          <text class="space-name">{{item.spaceName}}</text>
+          <text class="space-type">{{item.spaceType === 'PRIVATE_ROOM' ? '包厢' : item.spaceType === 'HALL' ? '大厅' : '桌位'}}</text>
+          <text class="space-status">{{item.status === 0 ? '空闲' : item.status === 1 ? '使用中' : '维护中'}}</text>
+          <text class="space-capacity">{{item.capacity}}人</text>
+        </view>
+      </view>
+    </scroll-view>
+    <empty-state wx:if="{{!spaces.length && !loading}}" text="暂无空间信息" icon="🏠" />
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="section">
+    <view class="section-title"><text>快捷入口</text></view>
+    <view class="quick-actions">
+      <view
+        wx:for="{{quickActions}}"
+        wx:key="text"
+        class="action-item"
+        data-path="{{item.path}}"
+        bindtap="onQuickAction"
+      >
+        <view class="action-icon">
+          <text>{{item.icon}}</text>
+        </view>
+        <text class="action-text">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

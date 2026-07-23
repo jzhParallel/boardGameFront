@@ -1,0 +1,83 @@
+@import '../../../styles/variables.scss';
+
+.page-scroll {
+  height: 100vh;
+  padding-bottom: 130rpx;
+}
+
+/* 搜索栏 */
+.search-bar {
+  padding: $spacing-lg $spacing-lg $spacing-sm;
+}
+
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  border-radius: $radius-round;
+  padding: $spacing-sm $spacing-lg;
+  box-shadow: $shadow-sm;
+}
+
+.search-icon {
+  font-size: $font-md;
+  margin-right: $spacing-sm;
+}
+
+.search-input {
+  flex: 1;
+  font-size: $font-md;
+  color: $color-text;
+}
+
+/* 分类 */
+.category-scroll {
+  width: 100%;
+  white-space: nowrap;
+  padding: $spacing-sm 0;
+}
+
+.category-list {
+  display: inline-flex;
+  gap: $spacing-sm;
+  padding: 0 $spacing-lg;
+}
+
+.category-item {
+  display: inline-flex;
+  padding: $spacing-xs $spacing-lg;
+  border-radius: $radius-round;
+  font-size: $font-sm;
+  color: $color-text-secondary;
+  background: $color-bg-card;
+  box-shadow: $shadow-sm;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+/* 桌游网格 */
+.games-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+}
+
+.game-item {
+  width: calc(50% - 12rpx);
+}
+
+/* 加载提示 */
+.loading-tip {
+  text-align: center;
+  padding: $spacing-lg;
+  font-size: $font-sm;
+  color: $color-text-light;
+}

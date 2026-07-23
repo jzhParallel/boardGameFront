@@ -1,0 +1,48 @@
+<view class="chat-page">
+  <!-- 顶部提示 -->
+  <view class="disclaimer">
+    <text>AI解答仅供参考，具体规则以店内说明为准</text>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view
+    class="message-list"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    scroll-top="{{scrollTop}}"
+    scroll-with-animation
+  >
+    <view class="messages-inner">
+      <chat-bubble
+        wx:for="{{messages}}"
+        wx:key="id"
+        type="{{item.type}}"
+        role="{{item.role}}"
+        content="{{item.content}}"
+        game-name="{{item.gameName}}"
+        game-players="{{item.gamePlayers}}"
+        game-difficulty="{{item.gameDifficulty}}"
+        bind:cardtap="onCardTap"
+      />
+    </view>
+  </scroll-view>
+
+  <!-- 输入区域 -->
+  <view class="input-area safe-bottom">
+    <view class="input-wrap">
+      <input
+        class="msg-input"
+        placeholder="问我任何桌游问题..."
+        value="{{inputValue}}"
+        bindinput="onInput"
+        bindconfirm="onSend"
+        confirm-type="send"
+        disabled="{{isTyping}}"
+      />
+      <view class="send-btn {{inputValue && !isTyping ? 'active' : ''}}" bindtap="onSend">
+        <text>发送</text>
+      </view>
+    </view>
+  </view>
+</view>

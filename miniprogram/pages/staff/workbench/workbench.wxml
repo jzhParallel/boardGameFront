@@ -1,0 +1,77 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <!-- 统计卡片 -->
+  <view class="stats-row">
+    <view class="stat-card">
+      <text class="stat-num">{{todayOrders}}</text>
+      <text class="stat-label">今日订单</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-num">{{activeOrders}}</text>
+      <text class="stat-label">进行中</text>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="section">
+    <view class="section-title"><text>快捷操作</text></view>
+    <view class="action-grid">
+      <view
+        wx:for="{{actions}}"
+        wx:key="text"
+        class="action-card"
+        data-path="{{item.path}}"
+        data-action="{{item.action}}"
+        bindtap="onActionTap"
+      >
+        <text class="action-icon">{{item.icon}}</text>
+        <text class="action-text">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 导航 -->
+  <view class="section">
+    <view class="section-title"><text>管理</text></view>
+    <view class="nav-list">
+      <view class="nav-item" bindtap="onGoReservation">
+        <text class="nav-icon">📅</text>
+        <text class="nav-text">预约管理</text>
+        <text class="nav-arrow">›</text>
+      </view>
+      <view class="nav-item" bindtap="onGoGames">
+        <text class="nav-icon">♟</text>
+        <text class="nav-text">桌游管理</text>
+        <text class="nav-arrow">›</text>
+      </view>
+      <view class="nav-item" bindtap="onGoUsers">
+        <text class="nav-icon">👥</text>
+        <text class="nav-text">用户列表</text>
+        <text class="nav-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 核销券弹窗 -->
+  <view wx:if="{{showVerify}}" class="modal-mask" bindtap="onVerifyClose">
+    <view class="modal-content" catchtap="">
+      <text class="modal-title">核销券码</text>
+      <input
+        class="verify-input"
+        placeholder="请输入券码"
+        value="{{verifyCode}}"
+        bindinput="onVerifyInput"
+        bindconfirm="onVerifySubmit"
+      />
+      <view wx:if="{{verifyResult === 'success'}}" class="verify-result success">
+        <text>✓ 核销成功</text>
+      </view>
+      <view wx:if="{{verifyResult === 'fail'}}" class="verify-result fail">
+        <text>✗ 券码无效或已使用</text>
+      </view>
+      <view class="modal-btns">
+        <view class="modal-btn cancel" bindtap="onVerifyClose"><text>关闭</text></view>
+        <view class="modal-btn confirm" bindtap="onVerifySubmit"><text>核销</text></view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,57 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <!-- 日期选择 -->
+  <view class="section">
+    <view class="section-title"><text>选择日期</text></view>
+    <scroll-view class="date-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="date-list">
+        <view
+          wx:for="{{dates}}"
+          wx:key="value"
+          class="date-item {{selectedDate === item.value ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectDate"
+        >
+          <text class="date-label">{{item.label}}</text>
+          <text class="date-value">{{item.value}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 空间选择 -->
+  <view class="section">
+    <view class="section-title"><text>选择空间</text></view>
+    <view class="space-grid">
+      <view
+        wx:for="{{spaces}}"
+        wx:key="id"
+        class="space-item {{selectedSpace && selectedSpace.id === item.id ? 'active' : ''}} {{item.status === 2 ? 'disabled' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onSelectSpace"
+      >
+        <text class="space-name">{{item.spaceName}}</text>
+        <text class="space-type">{{item.spaceType === 'PRIVATE_ROOM' ? '包厢' : item.spaceType === 'HALL' ? '大厅' : '桌位'}}</text>
+        <text class="space-cap">{{item.capacity}}人 · ¥{{item.pricePerHour}}/时</text>
+      </view>
+    </view>
+    <empty-state wx:if="{{!spaces.length && !loading}}" text="暂无可用空间" icon="🪑" />
+  </view>
+
+  <!-- 时段选择 -->
+  <view class="section" wx:if="{{selectedSpace}}">
+    <view class="section-title"><text>选择时段</text></view>
+    <time-grid
+      start-time="10:00"
+      end-time="22:00"
+      occupied-slots="{{occupiedSlots}}"
+      bind:change="onTimeChange"
+    />
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-area" wx:if="{{selectedSpace}}">
+    <button class="btn-primary submit-btn" bindtap="onSubmit" disabled="{{submitting}}">
+      {{submitting ? '提交中...' : '确认预约'}}
+    </button>
+  </view>
+</scroll-view>

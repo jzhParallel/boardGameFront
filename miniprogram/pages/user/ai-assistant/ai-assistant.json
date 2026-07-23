@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "chat-bubble": "/components/chat-bubble/chat-bubble"
+  },
+  "navigationBarTitleText": "AI助手"
+}

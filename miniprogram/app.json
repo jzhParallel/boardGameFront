@@ -1,0 +1,65 @@
+{
+  "pages": [
+    "pages/user/home/home",
+    "pages/user/reservation/reservation",
+    "pages/user/games/games",
+    "pages/user/ai-assistant/ai-assistant",
+    "pages/user/profile/profile",
+    "pages/user/game-detail/game-detail",
+    "pages/staff/workbench/workbench",
+    "pages/staff/reservation-mgmt/reservation-mgmt",
+    "pages/staff/games/games",
+    "pages/staff/game-detail/game-detail",
+    "pages/staff/users/users"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "桌游空间",
+    "navigationBarBackgroundColor": "#2D5A45",
+    "backgroundColor": "#FAF6F0",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#2D5A45",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/user/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/user/reservation/reservation",
+        "text": "预约"
+      },
+      {
+        "pagePath": "pages/user/games/games",
+        "text": "桌游"
+      },
+      {
+        "pagePath": "pages/user/ai-assistant/ai-assistant",
+        "text": "AI助手"
+      },
+      {
+        "pagePath": "pages/user/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true,
+      "defaultContentBox": true,
+      "tagNameStyleIsolation": "legacy",
+      "disableABTest": true,
+      "sdkVersionBegin": "3.0.0",
+      "sdkVersionEnd": "15.255.255"
+    }
+  },
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
