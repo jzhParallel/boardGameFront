@@ -67,67 +67,6 @@
   color: $color-text;
 }
 
-.idle-count {
-  font-size: $font-sm;
-  font-weight: 400;
-  color: $color-primary;
-}
-
-/* 空间横滑 */
-.space-scroll {
-  width: 100%;
-  white-space: nowrap;
-}
-
-.space-list {
-  display: inline-flex;
-  gap: $spacing-md;
-  padding: 4rpx;
-}
-
-.space-card {
-  display: inline-flex;
-  flex-direction: column;
-  width: 200rpx;
-  padding: $spacing-md;
-  border-radius: $radius-md;
-  background: $color-bg-card;
-  box-shadow: $shadow-sm;
-
-  &.idle {
-    border-left: 6rpx solid $color-success;
-  }
-
-  &.busy {
-    border-left: 6rpx solid $color-border;
-    opacity: 0.7;
-  }
-}
-
-.space-name {
-  font-size: $font-md;
-  font-weight: 600;
-  color: $color-text;
-  margin-bottom: 6rpx;
-}
-
-.space-type {
-  font-size: $font-xs;
-  color: $color-text-secondary;
-  margin-bottom: 6rpx;
-}
-
-.space-status {
-  font-size: $font-xs;
-  color: $color-primary;
-  margin-bottom: 4rpx;
-}
-
-.space-capacity {
-  font-size: $font-xs;
-  color: $color-text-light;
-}
-
 /* 快捷入口 */
 .quick-actions {
   display: flex;

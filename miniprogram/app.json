@@ -9,8 +9,7 @@
     "pages/staff/workbench/workbench",
     "pages/staff/reservation-mgmt/reservation-mgmt",
     "pages/staff/games/games",
-    "pages/staff/game-detail/game-detail",
-    "pages/staff/users/users"
+    "pages/staff/game-detail/game-detail"
   ],
   "window": {
     "navigationBarTextStyle": "white",
@@ -29,14 +28,6 @@
       {
         "pagePath": "pages/user/home/home",
         "text": "首页"
-      },
-      {
-        "pagePath": "pages/user/reservation/reservation",
-        "text": "预约"
-      },
-      {
-        "pagePath": "pages/user/games/games",
-        "text": "桌游"
       },
       {
         "pagePath": "pages/user/ai-assistant/ai-assistant",

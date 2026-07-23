@@ -33,7 +33,7 @@ Component({
   pageLifetimes: {
     show() {
       if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-        this.getTabBar().setData({ selected: 3 })
+        this.getTabBar().setData({ selected: 1 })
       }
       // 检查是否有从其他页面传来的问题
       const app = getApp()

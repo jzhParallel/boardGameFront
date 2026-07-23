@@ -1,5 +1,4 @@
-import { getSpaceList, Space } from '../../../services/space'
-import { getOrderPage } from '../../../services/order'
+import { getSpaceAvailable, SpaceVO } from '../../../services/space'
 import { createOrder } from '../../../services/order'
 import { DEFAULT_STORE_ID } from '../../../config'
 import { getUserInfo } from '../../../utils/auth'
@@ -8,8 +7,8 @@ Component({
   data: {
     dates: [] as { label: string; value: string }[],
     selectedDate: '',
-    spaces: [] as Space[],
-    selectedSpace: null as Space | null,
+    spaces: [] as SpaceVO[],
+    selectedSpace: null as SpaceVO | null,
     occupiedSlots: [] as string[],
     selectedStart: '',
     selectedEnd: '',
@@ -20,15 +19,6 @@ Component({
   lifetimes: {
     attached() {
       this.initDates()
-      this.loadSpaces()
-    },
-  },
-
-  pageLifetimes: {
-    show() {
-      if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-        this.getTabBar().setData({ selected: 1 })
-      }
     },
   },
 
@@ -48,13 +38,19 @@ Component({
         dates.push({ label, value })
       }
       this.setData({ dates, selectedDate: dates[0].value })
+      this.loadSpaces()
     },
 
+    /** 调用后端空闲时间查询接口 */
     async loadSpaces() {
       this.setData({ loading: true })
       try {
-        const spaces = await getSpaceList(DEFAULT_STORE_ID)
-        this.setData({ spaces, loading: false })
+        const res = await getSpaceAvailable({
+          storeId: DEFAULT_STORE_ID,
+          queryDate: this.data.selectedDate,
+          size: 100,
+        })
+        this.setData({ spaces: res.records, loading: false })
       } catch (err) {
         console.warn('加载空间失败:', err)
         this.setData({ loading: false })
@@ -64,39 +60,34 @@ Component({
     onSelectDate(e: any) {
       const { value } = e.currentTarget.dataset
       this.setData({ selectedDate: value, selectedSpace: null, occupiedSlots: [], selectedStart: '', selectedEnd: '' })
+      this.loadSpaces()
     },
 
-    async onSelectSpace(e: any) {
+    onSelectSpace(e: any) {
       const { id } = e.currentTarget.dataset
       const space = this.data.spaces.find(s => s.id === id) || null
-      this.setData({ selectedSpace: space, occupiedSlots: [], selectedStart: '', selectedEnd: '' })
+      this.setData({ selectedSpace: space, selectedStart: '', selectedEnd: '' })
       if (space) {
-        await this.loadOccupiedSlots(space.id)
+        this.extractOccupiedSlots(space)
       }
     },
 
-    /** 通过订单列表计算已占用时段 */
-    async loadOccupiedSlots(spaceId: number) {
-      try {
-        const res = await getOrderPage({ storeId: DEFAULT_STORE_ID, status: 0, size: 100 })
-        const occupied: string[] = []
-        const dateStr = this.data.selectedDate
-        res.records.forEach(order => {
-          if (order.spaceId !== spaceId) return
-          const start = order.startTime || ''
-          const end = order.endTime || ''
-          if (!start.startsWith(dateStr)) return
-          // 解析时间生成占用时段
-          const startMin = this.timeToMinutes(start.substring(11, 16))
-          const endMin = this.timeToMinutes(end.substring(11, 16))
+    /** 从后端返回的订单列表中提取已占用时段 */
+    extractOccupiedSlots(space: SpaceVO) {
+      const occupied: string[] = []
+      if (space.orders && space.orders.length > 0) {
+        space.orders.forEach(order => {
+          const start = (order.startTime || '').substring(11, 16)
+          const end = (order.endTime || '').substring(11, 16)
+          if (!start || !end) return
+          const startMin = this.timeToMinutes(start)
+          const endMin = this.timeToMinutes(end)
           for (let m = startMin; m < endMin; m += 30) {
             occupied.push(this.minutesToTime(m))
           }
         })
-        this.setData({ occupiedSlots: occupied })
-      } catch (err) {
-        console.warn('加载占用时段失败:', err)
       }
+      this.setData({ occupiedSlots: occupied })
     },
 
     timeToMinutes(t: string): number {
@@ -141,7 +132,13 @@ Component({
         })
         wx.showToast({ title: '预约成功！', icon: 'success' })
         this.setData({ selectedStart: '', selectedEnd: '', occupiedSlots: [] })
-        await this.loadOccupiedSlots(selectedSpace.id)
+        // 重新加载空间数据
+        await this.loadSpaces()
+        const updated = this.data.spaces.find(s => s.id === selectedSpace.id)
+        if (updated) {
+          this.setData({ selectedSpace: updated })
+          this.extractOccupiedSlots(updated)
+        }
       } catch (err) {
         console.warn('预约失败:', err)
       } finally {

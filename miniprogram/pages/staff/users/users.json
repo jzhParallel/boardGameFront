@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "empty-state": "/components/empty-state/empty-state"
-  },
-  "navigationBarTitleText": "用户列表"
-}

@@ -5,7 +5,8 @@ export interface Store {
   storeName: string
   address: string
   phone: string
-  businessHours: string
+  openTime: string
+  closeTime: string
   status: number
 }
 

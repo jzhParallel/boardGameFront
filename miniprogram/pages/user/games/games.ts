@@ -19,14 +19,6 @@ Component({
     },
   },
 
-  pageLifetimes: {
-    show() {
-      if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-        this.getTabBar().setData({ selected: 2 })
-      }
-    },
-  },
-
   methods: {
     async loadGames(reset = false) {
       if (this.data.loading) return

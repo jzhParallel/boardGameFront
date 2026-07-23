@@ -1,6 +1,4 @@
 {
-  "usingComponents": {
-    "empty-state": "/components/empty-state/empty-state"
-  },
+  "usingComponents": {},
   "navigationBarTitleText": "桌游空间"
 }

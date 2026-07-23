@@ -1,4 +1,5 @@
 import { get, put } from '../utils/request'
+import { PageResult } from './boardGame'
 
 export interface Space {
   id: number
@@ -11,9 +12,35 @@ export interface Space {
   remark: string
 }
 
+export interface SpaceOrder {
+  id: number
+  spaceId: number
+  startTime: string
+  endTime: string
+  status: number
+}
+
+/** 空间+时间范围内订单列表 */
+export interface SpaceVO extends Space {
+  orders: SpaceOrder[]
+}
+
+export interface SpaceAvailableParams {
+  storeId: number
+  spaceType?: string
+  queryDate?: string // YYYY-MM-DD
+  current?: number
+  size?: number
+}
+
 /** 获取店铺空间列表 */
 export function getSpaceList(storeId: number): Promise<Space[]> {
   return get<Space[]>('/api/space/list', { storeId })
+}
+
+/** 空闲时间分页查询（空间+时间范围内订单列表） */
+export function getSpaceAvailable(params: SpaceAvailableParams): Promise<PageResult<SpaceVO>> {
+  return get<PageResult<SpaceVO>>('/api/space/available', params)
 }
 
 /** 获取空间详情 */

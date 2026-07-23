@@ -24,7 +24,7 @@ Component({
   pageLifetimes: {
     show() {
       if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-        this.getTabBar().setData({ selected: 4 })
+        this.getTabBar().setData({ selected: 2 })
       }
       // 每次显示时检查是否为店员
       this.setData({ showStaffEntry: isStaff() })

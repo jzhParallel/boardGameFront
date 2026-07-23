@@ -54,10 +54,6 @@ Component({
       wx.navigateTo({ url: '/pages/staff/games/games' })
     },
 
-    onGoUsers() {
-      wx.navigateTo({ url: '/pages/staff/users/users' })
-    },
-
     // 核销券
     onVerifyInput(e: any) {
       this.setData({ verifyCode: e.detail.value })
