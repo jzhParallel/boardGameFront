@@ -15,5 +15,4 @@ interface IAppOption {
     storeId: number
     aiQuestion?: string
   }
-  silentLogin(): void
 }

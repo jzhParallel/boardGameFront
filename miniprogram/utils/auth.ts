@@ -47,3 +47,24 @@ export function isStaff(): boolean {
   const info = getUserInfo()
   return info?.role === 'STAFF' || info?.role === 'ADMIN'
 }
+
+/** 登录页路径 */
+const LOGIN_PAGE = '/pages/login/login'
+
+/**
+ * 检查登录状态，未登录时跳转到登录页
+ * @returns 是否已登录
+ */
+export function checkLogin(): boolean {
+  if (isLoggedIn()) {
+    return true
+  }
+  // 避免在登录页重复跳转
+  const pages = getCurrentPages()
+  const currentPage = pages[pages.length - 1]
+  if (currentPage && '/' + currentPage.route === LOGIN_PAGE) {
+    return false
+  }
+  wx.redirectTo({ url: LOGIN_PAGE })
+  return false
+}

@@ -1,6 +1,12 @@
 import { BASE_URL } from '../config'
 import { getToken, clearToken } from './auth'
 
+/** 登录页路径 */
+const LOGIN_PAGE = '/pages/login/login'
+
+/** 防止多个请求同时 401 时重复跳转 */
+let isRedirectingToLogin = false
+
 /** 后端统一响应结构 */
 interface ApiResponse<T = any> {
   code: number
@@ -47,6 +53,7 @@ export function request<T = any>(options: RequestOptions): Promise<T> {
           if (!options.silent) {
             wx.showToast({ title: '登录已过期，请重新登录', icon: 'none' })
           }
+          redirectToLogin()
           reject(new Error('未授权'))
           return
         }
@@ -66,6 +73,25 @@ export function request<T = any>(options: RequestOptions): Promise<T> {
         reject(new Error(err.errMsg || '网络异常'))
       },
     })
+  })
+}
+
+/** 401 时跳转到登录页（带防重复机制） */
+function redirectToLogin() {
+  if (isRedirectingToLogin) return
+  const pages = getCurrentPages()
+  const currentPage = pages[pages.length - 1]
+  // 当前已在登录页则不再跳转
+  if (currentPage && '/' + currentPage.route === LOGIN_PAGE) return
+  isRedirectingToLogin = true
+  wx.redirectTo({
+    url: LOGIN_PAGE,
+    complete: () => {
+      // 延迟重置标志，避免同一批次的多个 401 响应重复触发跳转
+      setTimeout(() => {
+        isRedirectingToLogin = false
+      }, 1000)
+    },
   })
 }
 
