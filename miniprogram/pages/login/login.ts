@@ -1,13 +1,19 @@
 import { wxLogin } from '../../services/auth'
+import { getTenantList, Tenant } from '../../services/tenant'
 import { isLoggedIn, getUserInfo } from '../../utils/auth'
 
 const app = getApp<IAppOption>()
 
 Page({
   data: {
-    /** 登录状态：loading 登录中 | error 登录失败 */
-    status: 'loading' as 'loading' | 'error',
+    /** 登录状态：selecting 选择商户 | loading 登录中 | error 登录失败 */
+    status: 'selecting' as 'selecting' | 'loading' | 'error',
     errorMsg: '',
+    tenants: [] as Tenant[],
+    tenantNames: ['请选择要登录的商户'],
+    selectedTenantIndex: 0,
+    selectedTenantId: 0,
+    selectedTenantName: '',
   },
 
   onLoad() {
@@ -28,19 +34,74 @@ Page({
       wx.switchTab({ url: '/pages/user/home/home' })
       return
     }
-    // 未登录，自动触发微信登录流程
-    this.doLogin()
+    // 未登录，先加载商户列表，由用户选择商户后再登录
+    this.loadTenants()
+  },
+
+  /** 加载可登录商户列表 */
+  async loadTenants() {
+    this.setData({ status: 'selecting', errorMsg: '' })
+
+    try {
+      const tenants = await getTenantList()
+      this.setData({
+        tenants,
+        tenantNames: ['请选择要登录的商户', ...tenants.map((tenant) => tenant.tenantName)],
+        selectedTenantIndex: 0,
+        selectedTenantId: 0,
+        selectedTenantName: '',
+      })
+      if (tenants.length === 0) {
+        this.setData({
+          status: 'error',
+          errorMsg: '暂无可登录商户，请联系管理员',
+        })
+      }
+    } catch (err: any) {
+      console.error('加载商户列表失败:', err)
+      this.setData({
+        status: 'error',
+        errorMsg: err?.message || '加载商户列表失败，请重试',
+      })
+    }
+  },
+
+  /** 选择商户 */
+  onTenantChange(e: WechatMiniprogram.CustomEvent<{ value: string }>) {
+    const index = Number(e.detail.value)
+    if (index === 0) {
+      this.setData({
+        selectedTenantIndex: 0,
+        selectedTenantId: 0,
+        selectedTenantName: '',
+      })
+      return
+    }
+    const tenant = this.data.tenants[index - 1]
+    if (!tenant) {
+      return
+    }
+    this.setData({
+      selectedTenantIndex: index,
+      selectedTenantId: tenant.id,
+      selectedTenantName: tenant.tenantName,
+    })
   },
 
   /** 触发微信登录流程 */
   async doLogin() {
+    if (!this.data.selectedTenantId) {
+      wx.showToast({ title: '请先选择商户', icon: 'none' })
+      return
+    }
+
     this.setData({ status: 'loading', errorMsg: '' })
 
     try {
       // 1. 调用 wx.login 获取临时登录凭证 code
       const code = await this.getWxCode()
       // 2. 将 code 发送到后端换取 token
-      const loginRes = await wxLogin(code)
+      const loginRes = await wxLogin(code, this.data.selectedTenantId)
       // 3. 更新全局用户信息
       app.globalData.userInfo = {
         userId: loginRes.userId,
@@ -92,6 +153,10 @@ Page({
 
   /** 重试登录 */
   onRetry() {
-    this.doLogin()
+    if (this.data.selectedTenantId) {
+      this.doLogin()
+      return
+    }
+    this.loadTenants()
   },
 })

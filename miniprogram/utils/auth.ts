@@ -51,6 +51,16 @@ export function isStaff(): boolean {
 /** 登录页路径 */
 const LOGIN_PAGE = '/pages/login/login'
 
+/** 跳转到登录页并清空页面栈 */
+export function goLogin(): void {
+  const pages = getCurrentPages()
+  const currentPage = pages[pages.length - 1]
+  if (currentPage && '/' + currentPage.route === LOGIN_PAGE) {
+    return
+  }
+  wx.reLaunch({ url: LOGIN_PAGE })
+}
+
 /**
  * 检查登录状态，未登录时跳转到登录页
  * @returns 是否已登录
@@ -65,6 +75,6 @@ export function checkLogin(): boolean {
   if (currentPage && '/' + currentPage.route === LOGIN_PAGE) {
     return false
   }
-  wx.redirectTo({ url: LOGIN_PAGE })
+  goLogin()
   return false
 }

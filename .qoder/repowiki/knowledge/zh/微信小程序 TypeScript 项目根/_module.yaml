@@ -1,0 +1,12 @@
+schema_version: 1
+module_path: ""
+title: 微信小程序 TypeScript 项目根
+scope:
+    - package.json
+    - project.config.json
+    - project.private.config.json
+    - tsconfig.json
+    - typings/
+source_files: []
+depends_on: []
+related_to: []

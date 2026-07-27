@@ -1,0 +1,34 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: zh-CN
+branch: main
+nodes_managed: true
+exported_at: "2026-07-27T00:12:23Z"
+modules:
+    "":
+        dir_name: 微信小程序 TypeScript 项目根
+        title: 微信小程序 TypeScript 项目根
+        scope:
+            - package.json
+            - project.config.json
+            - project.private.config.json
+            - tsconfig.json
+            - typings/
+        source_files: []
+        children:
+            - app_entry
+        depends_on: []
+        related_to: []
+    app_entry:
+        dir_name: 小程序应用入口与全局配置
+        title: 小程序应用入口与全局配置
+        scope:
+            - miniprogram/app.ts
+            - miniprogram/app.json
+            - miniprogram/app.scss
+            - miniprogram/config.ts
+            - miniprogram/sitemap.json
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []

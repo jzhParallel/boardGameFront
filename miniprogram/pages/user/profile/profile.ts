@@ -1,6 +1,9 @@
 import { getOrderPage, BoardOrder } from '../../../services/order'
-import { getUserInfo, isStaff, clearToken } from '../../../utils/auth'
+import { logout } from '../../../services/auth'
+import { getUserInfo, isStaff, clearToken, goLogin } from '../../../utils/auth'
 import { DEFAULT_STORE_ID } from '../../../config'
+
+const app = getApp<IAppOption>()
 
 Component({
   data: {
@@ -84,11 +87,18 @@ Component({
       wx.showModal({
         title: '提示',
         content: '确定退出登录吗？',
-        success: (res) => {
+        success: async (res) => {
           if (res.confirm) {
+            try {
+              await logout()
+            } catch (err) {
+              console.warn('退出登录接口调用失败:', err)
+            }
             clearToken()
+            app.globalData.userInfo = null
+            app.globalData.storeId = 1
             this.setData({ nickname: '微信用户', orders: [], showStaffEntry: false })
-            wx.showToast({ title: '已退出', icon: 'success' })
+            goLogin()
           }
         },
       })

@@ -12,8 +12,8 @@ interface LoginVO {
 }
 
 /** 微信登录（小程序端） */
-export async function wxLogin(code: string): Promise<LoginVO> {
-  const res = await post<LoginVO>('/api/auth/wx-login', { code })
+export async function wxLogin(code: string, tenantId: number): Promise<LoginVO> {
+  const res = await post<LoginVO>('/api/auth/wx-login', { code, tenantId })
   setToken(res.token)
   const userInfo: UserInfo = {
     userId: res.userId,

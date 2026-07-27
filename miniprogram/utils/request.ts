@@ -1,8 +1,5 @@
 import { BASE_URL } from '../config'
-import { getToken, clearToken } from './auth'
-
-/** 登录页路径 */
-const LOGIN_PAGE = '/pages/login/login'
+import { getToken, clearToken, goLogin } from './auth'
 
 /** 防止多个请求同时 401 时重复跳转 */
 let isRedirectingToLogin = false
@@ -79,20 +76,12 @@ export function request<T = any>(options: RequestOptions): Promise<T> {
 /** 401 时跳转到登录页（带防重复机制） */
 function redirectToLogin() {
   if (isRedirectingToLogin) return
-  const pages = getCurrentPages()
-  const currentPage = pages[pages.length - 1]
-  // 当前已在登录页则不再跳转
-  if (currentPage && '/' + currentPage.route === LOGIN_PAGE) return
   isRedirectingToLogin = true
-  wx.redirectTo({
-    url: LOGIN_PAGE,
-    complete: () => {
-      // 延迟重置标志，避免同一批次的多个 401 响应重复触发跳转
-      setTimeout(() => {
-        isRedirectingToLogin = false
-      }, 1000)
-    },
-  })
+  goLogin()
+  // 延迟重置标志，避免同一批次的多个 401 响应重复触发跳转
+  setTimeout(() => {
+    isRedirectingToLogin = false
+  }, 1000)
 }
 
 /** GET 请求 */
