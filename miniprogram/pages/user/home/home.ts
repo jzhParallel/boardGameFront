@@ -1,10 +1,14 @@
-import { getStoreDetail, Store } from '../../../services/store'
-import { DEFAULT_STORE_ID } from '../../../config'
+import { getStoreList, Store } from '../../../services/store'
 import { isLoggedIn } from '../../../utils/auth'
+
+const app = getApp<IAppOption>()
 
 Component({
   data: {
     store: null as Store | null,
+    stores: [] as Store[],
+    storeNames: [] as string[],
+    selectedStoreIndex: 0,
     loading: true,
     quickActions: [
       { icon: '▦', text: '预约', path: '/pages/user/reservation/reservation' },
@@ -35,16 +39,54 @@ Component({
       }
       this.setData({ loading: true })
       try {
-        const store = await getStoreDetail(DEFAULT_STORE_ID)
-        this.setData({ store, loading: false })
+        const stores = await getStoreList()
+        const store = this.resolveCurrentStore(stores)
+        this.setCurrentStore(store, stores)
+        this.setData({ loading: false })
       } catch (err) {
         console.warn('加载首页数据失败:', err)
         this.setData({ loading: false })
       }
     },
 
+    resolveCurrentStore(stores: Store[]): Store {
+      if (stores.length === 0) {
+        throw new Error('当前商户暂无可用店铺')
+      }
+      const currentStoreId = app.globalData.currentStore?.id || app.globalData.storeId
+      return stores.find(store => store.id === currentStoreId) || stores[0]
+    },
+
+    setCurrentStore(store: Store, stores = this.data.stores) {
+      const selectedStoreIndex = stores.findIndex(item => item.id === store.id)
+      app.globalData.currentStore = store
+      app.globalData.storeId = store.id
+      if (app.globalData.userInfo) {
+        app.globalData.userInfo.storeId = store.id
+      }
+      this.setData({
+        store,
+        stores,
+        storeNames: stores.map(item => item.storeName),
+        selectedStoreIndex: selectedStoreIndex >= 0 ? selectedStoreIndex : 0,
+      })
+    },
+
+    onStoreChange(e: WechatMiniprogram.CustomEvent<{ value: string }>) {
+      const index = Number(e.detail.value)
+      const store = this.data.stores[index]
+      if (!store) {
+        return
+      }
+      this.setCurrentStore(store)
+    },
+
     onQuickAction(e: any) {
       const { path } = e.currentTarget.dataset
+      if (path === '/pages/user/reservation/reservation') {
+        wx.navigateTo({ url: `${path}?storeId=${app.globalData.storeId}` })
+        return
+      }
       wx.navigateTo({ url: path })
     },
 

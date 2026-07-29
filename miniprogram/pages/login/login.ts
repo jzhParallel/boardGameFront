@@ -1,4 +1,5 @@
 import { wxLogin } from '../../services/auth'
+import { getStoreList, Store } from '../../services/store'
 import { getTenantList, Tenant } from '../../services/tenant'
 import { isLoggedIn, getUserInfo } from '../../utils/auth'
 
@@ -16,7 +17,7 @@ Page({
     selectedTenantName: '',
   },
 
-  onLoad() {
+  async onLoad() {
     // 已有有效登录态，恢复用户信息并直接进入首页
     if (isLoggedIn()) {
       const info = getUserInfo()
@@ -32,7 +33,20 @@ Page({
         }
         app.globalData.storeId = info.storeId || 1
       }
-      wx.switchTab({ url: '/pages/user/home/home' })
+      try {
+        await this.loadFirstStore()
+        wx.switchTab({ url: '/pages/user/home/home' })
+      } catch (err: any) {
+        console.warn('加载店铺列表失败:', err)
+        if (!isLoggedIn()) {
+          this.loadTenants()
+          return
+        }
+        this.setData({
+          status: 'error',
+          errorMsg: err?.message || '加载店铺列表失败，请重试',
+        })
+      }
       return
     }
     // 未登录，先加载商户列表，由用户选择商户后再登录
@@ -114,6 +128,7 @@ Page({
         storeId: loginRes.storeId,
       }
       app.globalData.storeId = loginRes.storeId || 1
+      await this.loadFirstStore()
       // 4. 登录成功，跳转到目标页面
       this.navigateAfterLogin()
     } catch (err: any) {
@@ -122,6 +137,25 @@ Page({
         status: 'error',
         errorMsg: err?.message || '登录失败，请重试',
       })
+    }
+  },
+
+  /** 获取当前商户第一个店铺 */
+  async loadFirstStore() {
+    const stores = await getStoreList()
+    const firstStore = stores[0]
+    if (!firstStore) {
+      throw new Error('当前商户暂无可用店铺，请联系管理员')
+    }
+    this.setCurrentStore(firstStore)
+  },
+
+  /** 保存当前展示店铺 */
+  setCurrentStore(store: Store) {
+    app.globalData.currentStore = store
+    app.globalData.storeId = store.id
+    if (app.globalData.userInfo) {
+      app.globalData.userInfo.storeId = store.id
     }
   },
 

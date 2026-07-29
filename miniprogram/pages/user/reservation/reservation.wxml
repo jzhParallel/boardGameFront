@@ -42,6 +42,7 @@
       start-time="10:00"
       end-time="22:00"
       occupied-slots="{{occupiedSlots}}"
+      my-reserved-slots="{{myReservedSlots}}"
       bind:change="onTimeChange"
     />
   </view>

@@ -17,6 +17,7 @@ export interface Space {
 export interface SpaceOrder {
   id: number
   spaceId: number
+  customerId: number
   startTime: string
   endTime: string
   status: number

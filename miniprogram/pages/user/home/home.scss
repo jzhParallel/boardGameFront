@@ -18,13 +18,41 @@
 
 .store-info {
   flex: 1;
+  min-width: 0;
+}
+
+.store-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
 }
 
 .store-name {
   font-size: $font-xxl;
   font-weight: 700;
   display: block;
-  margin-bottom: $spacing-sm;
+  max-width: 420rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.store-switch-icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin-left: $spacing-sm;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-md;
+  color: $color-text-white;
+  flex-shrink: 0;
+
+  &:active {
+    background: rgba(255, 255, 255, 0.28);
+  }
 }
 
 .store-meta {

@@ -27,7 +27,6 @@ Component({
           avatar: resolveAssetUrl(info.avatar),
         })
       }
-      this.loadOrders()
     },
   },
 
@@ -37,6 +36,7 @@ Component({
         this.getTabBar().setData({ selected: 2 })
       }
       this.setData({ showStaffEntry: isStaff() })
+      this.loadOrders()
     },
   },
 
@@ -44,7 +44,7 @@ Component({
     async loadOrders() {
       this.setData({ loading: true })
       try {
-        const res = await getOrderPage({ storeId: DEFAULT_STORE_ID, size: 20 })
+        const res = await getOrderPage({ storeId: this.getCurrentStoreId(), size: 20 })
         this.setData({ orders: res.records, loading: false })
       } catch (err) {
         console.warn('加载订单失败:', err)
@@ -131,6 +131,7 @@ Component({
             clearToken()
             app.globalData.userInfo = null
             app.globalData.storeId = 1
+            app.globalData.currentStore = null
             wx.showToast({ title: '已退出', icon: 'success' })
             this.setData({ nickname: '微信用户', avatar: '', orders: [], showStaffEntry: false })
             setTimeout(() => {
@@ -143,6 +144,10 @@ Component({
 
     onPullDownRefresh() {
       this.loadOrders().then(() => wx.stopPullDownRefresh())
+    },
+
+    getCurrentStoreId(): number {
+      return app.globalData.storeId || DEFAULT_STORE_ID
     },
   },
 })

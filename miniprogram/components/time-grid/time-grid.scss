@@ -10,6 +10,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12rpx;
   margin-bottom: $spacing-md;
 }
 
@@ -20,6 +22,7 @@
 
 .legend {
   display: flex;
+  flex-wrap: wrap;
   gap: 16rpx;
 }
 
@@ -47,6 +50,11 @@
   &.occupied {
     background: #EEEEEE;
     border: 1rpx solid #CCCCCC;
+  }
+
+  &.reserved {
+    background: #FFF7E6;
+    border: 1rpx solid $color-warning;
   }
 
   &.selected {
@@ -82,6 +90,12 @@
     background: #F5F5F5;
     color: #CCCCCC;
     border: 1rpx solid #EEEEEE;
+  }
+
+  &.reserved {
+    background: #FFF7E6;
+    color: #A86A00;
+    border: 1rpx solid rgba(250, 173, 20, 0.45);
   }
 
   &.selected {

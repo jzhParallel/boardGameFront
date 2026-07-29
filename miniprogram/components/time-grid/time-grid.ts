@@ -1,6 +1,6 @@
 interface TimeSlot {
   time: string
-  status: 'available' | 'occupied' | 'selected'
+  status: 'available' | 'occupied' | 'reserved' | 'selected'
 }
 
 Component({
@@ -11,6 +11,8 @@ Component({
     endTime: { type: String, value: '22:00' },
     /** 已占用时段列表 如 ["10:00","10:30"] */
     occupiedSlots: { type: Array, value: [] as string[] },
+    /** 我的已预约时段列表 如 ["10:00","10:30"] */
+    myReservedSlots: { type: Array, value: [] as string[] },
   },
   data: {
     slots: [] as TimeSlot[],
@@ -23,13 +25,13 @@ Component({
     },
   },
   observers: {
-    'occupiedSlots, startTime, endTime'() {
+    'occupiedSlots, myReservedSlots, startTime, endTime'() {
       this.generateSlots()
     },
   },
   methods: {
     generateSlots() {
-      const { startTime, endTime, occupiedSlots } = this.data
+      const { startTime, endTime, occupiedSlots, myReservedSlots } = this.data
       const slots: TimeSlot[] = []
       const [sh, sm] = startTime.split(':').map(Number)
       const [eh, em] = endTime.split(':').map(Number)
@@ -41,9 +43,10 @@ Component({
         const m = current % 60
         const time = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
         const isOccupied = (occupiedSlots as string[]).includes(time)
+        const isReserved = (myReservedSlots as string[]).includes(time)
         slots.push({
           time,
-          status: isOccupied ? 'occupied' : 'available',
+          status: isReserved ? 'reserved' : isOccupied ? 'occupied' : 'available',
         })
         current += 30
       }
@@ -55,7 +58,7 @@ Component({
       const slots = [...this.data.slots]
       const slot = slots[index]
 
-      if (slot.status === 'occupied') return
+      if (slot.status === 'occupied' || slot.status === 'reserved') return
 
       // 如果没选开始，或已经选了连续段，重新开始选
       if (!this.data.selectedStart || this.data.selectedEnd) {
@@ -75,8 +78,8 @@ Component({
       const from = Math.min(startIdx, index)
       const to = Math.max(startIdx, index)
       for (let i = from; i <= to; i++) {
-        if (slots[i].status === 'occupied') {
-          wx.showToast({ title: '所选时段包含已占用时间', icon: 'none' })
+        if (slots[i].status === 'occupied' || slots[i].status === 'reserved') {
+          wx.showToast({ title: '所选时段包含不可预约时间', icon: 'none' })
           return
         }
       }

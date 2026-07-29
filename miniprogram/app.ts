@@ -4,6 +4,7 @@ App<IAppOption>({
   globalData: {
     userInfo: null,
     storeId: 1, // 默认店铺ID
+    currentStore: null,
   },
 
   onLaunch() {

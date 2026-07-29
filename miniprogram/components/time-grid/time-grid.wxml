@@ -2,9 +2,10 @@
   <view class="grid-header">
     <text class="hint">点击选择时段（可连选）</text>
     <view class="legend">
-      <view class="legend-item"><view class="dot available"></view><text>可选</text></view>
-      <view class="legend-item"><view class="dot occupied"></view><text>已占</text></view>
-      <view class="legend-item"><view class="dot selected"></view><text>已选</text></view>
+      <view class="legend-item"><view class="dot available"></view><text>空闲</text></view>
+      <view class="legend-item"><view class="dot occupied"></view><text>已占用</text></view>
+      <view class="legend-item"><view class="dot reserved"></view><text>我已预约</text></view>
+      <view class="legend-item"><view class="dot selected"></view><text>我已选择</text></view>
     </view>
   </view>
   <view class="grid-body">
@@ -19,6 +20,6 @@
     </view>
   </view>
   <view wx:if="{{selectedStart}}" class="selection-info">
-    <text>已选：{{selectedStart}} - {{selectedEnd || '请选择结束时段'}}</text>
+    <text>我已选择：{{selectedStart}} - {{selectedEnd || '请选择结束时段'}}</text>
   </view>
 </view>

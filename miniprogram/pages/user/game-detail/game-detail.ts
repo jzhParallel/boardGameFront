@@ -1,6 +1,8 @@
 import { getBoardGameDetail, getBoardGameRule, BoardGame, BoardGameRule, getStoreGameList, StoreGame } from '../../../services/boardGame'
 import { DEFAULT_STORE_ID } from '../../../config'
 
+const app = getApp<IAppOption>()
+
 function toRichTextNodes(content: string): string {
   const text = String(content || '').trim()
   if (!text) return ''
@@ -48,7 +50,7 @@ Component({
         })
 
         try {
-          const storeGames = await getStoreGameList(DEFAULT_STORE_ID)
+          const storeGames = await getStoreGameList(this.getCurrentStoreId())
           const sg = storeGames.find(s => s.gameId === id) || null
           this.setData({ storeGame: sg })
         } catch (e) {
@@ -64,6 +66,10 @@ Component({
       const name = this.data.game?.gameName || ''
       getApp().globalData.aiQuestion = `${name}怎么玩？`
       wx.switchTab({ url: '/pages/user/ai-assistant/ai-assistant' })
+    },
+
+    getCurrentStoreId(): number {
+      return app.globalData.storeId || DEFAULT_STORE_ID
     },
   },
 })

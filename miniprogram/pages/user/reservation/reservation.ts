@@ -3,6 +3,8 @@ import { createOrder } from '../../../services/order'
 import { DEFAULT_STORE_ID } from '../../../config'
 import { getUserInfo } from '../../../utils/auth'
 
+const app = getApp<IAppOption>()
+
 Component({
   data: {
     dates: [] as { label: string; value: string }[],
@@ -10,20 +12,32 @@ Component({
     spaces: [] as SpaceVO[],
     selectedSpace: null as SpaceVO | null,
     occupiedSlots: [] as string[],
+    myReservedSlots: [] as string[],
     selectedStart: '',
     selectedEnd: '',
+    currentStoreId: 0,
     submitting: false,
     loading: true,
   },
 
   lifetimes: {
     attached() {
+      this.initCurrentStoreId()
       this.initDates()
     },
   },
 
   methods: {
     /** 生成未来7天日期 */
+    initCurrentStoreId() {
+      const pages = getCurrentPages()
+      const currentPage = pages[pages.length - 1] as any
+      const routeStoreId = Number(currentPage.options?.storeId || 0)
+      const currentStoreId = routeStoreId || app.globalData.storeId || DEFAULT_STORE_ID
+      this.setData({ currentStoreId })
+      app.globalData.storeId = currentStoreId
+    },
+
     initDates() {
       const dates: { label: string; value: string }[] = []
       const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
@@ -46,7 +60,7 @@ Component({
       this.setData({ loading: true })
       try {
         const res = await getSpaceAvailable({
-          storeId: DEFAULT_STORE_ID,
+          storeId: this.getCurrentStoreId(),
           queryDate: this.data.selectedDate,
           size: 100,
         })
@@ -59,7 +73,14 @@ Component({
 
     onSelectDate(e: any) {
       const { value } = e.currentTarget.dataset
-      this.setData({ selectedDate: value, selectedSpace: null, occupiedSlots: [], selectedStart: '', selectedEnd: '' })
+      this.setData({
+        selectedDate: value,
+        selectedSpace: null,
+        occupiedSlots: [],
+        myReservedSlots: [],
+        selectedStart: '',
+        selectedEnd: '',
+      })
       this.loadSpaces()
     },
 
@@ -68,26 +89,30 @@ Component({
       const space = this.data.spaces.find(s => s.id === id) || null
       this.setData({ selectedSpace: space, selectedStart: '', selectedEnd: '' })
       if (space) {
-        this.extractOccupiedSlots(space)
+        this.extractReservedSlots(space)
       }
     },
 
-    /** 从后端返回的订单列表中提取已占用时段 */
-    extractOccupiedSlots(space: SpaceVO) {
+    /** 从后端返回的订单列表中提取别人占用和我的预约时段 */
+    extractReservedSlots(space: SpaceVO) {
       const occupied: string[] = []
+      const myReserved: string[] = []
+      const currentUserId = getUserInfo()?.userId
       if (space.orders && space.orders.length > 0) {
         space.orders.forEach(order => {
           const start = (order.startTime || '').substring(11, 16)
           const end = (order.endTime || '').substring(11, 16)
           if (!start || !end) return
+          const isMine = !!currentUserId && Number(order.customerId) === Number(currentUserId)
+          const targetSlots = isMine ? myReserved : occupied
           const startMin = this.timeToMinutes(start)
           const endMin = this.timeToMinutes(end)
           for (let m = startMin; m < endMin; m += 30) {
-            occupied.push(this.minutesToTime(m))
+            targetSlots.push(this.minutesToTime(m))
           }
         })
       }
-      this.setData({ occupiedSlots: occupied })
+      this.setData({ occupiedSlots: occupied, myReservedSlots: myReserved })
     },
 
     timeToMinutes(t: string): number {
@@ -121,7 +146,7 @@ Component({
       this.setData({ submitting: true })
       try {
         await createOrder({
-          storeId: DEFAULT_STORE_ID,
+          storeId: selectedSpace.storeId || this.getCurrentStoreId(),
           spaceId: selectedSpace.id,
           customerId: userInfo?.userId || 0,
           customerName: userInfo?.nickname || '微信用户',
@@ -131,19 +156,23 @@ Component({
           remark: '用户预约',
         })
         wx.showToast({ title: '预约成功！', icon: 'success' })
-        this.setData({ selectedStart: '', selectedEnd: '', occupiedSlots: [] })
+        this.setData({ selectedStart: '', selectedEnd: '', occupiedSlots: [], myReservedSlots: [] })
         // 重新加载空间数据
         await this.loadSpaces()
         const updated = this.data.spaces.find(s => s.id === selectedSpace.id)
         if (updated) {
           this.setData({ selectedSpace: updated })
-          this.extractOccupiedSlots(updated)
+          this.extractReservedSlots(updated)
         }
       } catch (err) {
         console.warn('预约失败:', err)
       } finally {
         this.setData({ submitting: false })
       }
+    },
+
+    getCurrentStoreId(): number {
+      return this.data.currentStoreId || app.globalData.storeId || DEFAULT_STORE_ID
     },
   },
 })

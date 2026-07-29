@@ -1,7 +1,14 @@
 <scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
   <view class="store-header">
     <view class="store-info">
-      <text class="store-name">{{store.storeName || '桌游空间'}}</text>
+      <picker mode="selector" range="{{storeNames}}" value="{{selectedStoreIndex}}" bindchange="onStoreChange">
+        <view class="store-title">
+          <text class="store-name">{{store.storeName || '桌游空间'}}</text>
+          <view class="store-switch-icon">
+            <text>⇄</text>
+          </view>
+        </view>
+      </picker>
       <view class="store-meta">
         <text class="meta-item">{{store.address || '加载中...'}}</text>
       </view>
