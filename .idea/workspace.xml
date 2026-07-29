@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="df955e5d-d162-4c00-a35c-ab6298c3ded3" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/_index.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/业务术语表/业务术语表.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript + Sass 构建系统/微信小程序 TypeScript + Sass 构建系统.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/_module.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/小程序应用入口与全局配置/_module.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/小程序应用入口与全局配置/技术栈.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/小程序应用入口与全局配置/架构设计.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/小程序应用入口与全局配置/概述.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/小程序应用入口与全局配置/特殊配置与命令.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/小程序应用入口与全局配置/编码规范.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/技术栈.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/架构设计.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/概述.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/特殊配置与命令.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序 TypeScript 项目根/编码规范.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序依赖管理（TypeScript + Sass 编译链）/微信小程序依赖管理（TypeScript + Sass 编译链）.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序前端样式体系（Sass + 设计令牌）/微信小程序前端样式体系（Sass + 设计令牌）.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序原生 console 调试输出（无统一日志框架）/微信小程序原生 console 调试输出（无统一日志框架）.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序配置系统/微信小程序配置系统.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信小程序错误处理体系/微信小程序错误处理体系.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/knowledge/zh/微信（小程序平台）/微信（小程序平台）.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/工具函数库.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/快速开始.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/服务层设计/存储服务.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/服务层设计/服务层设计.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/服务层设计/游戏服务.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/服务层设计/空间服务.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/服务层设计/订单服务.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/服务层设计/认证服务.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/数据流设计.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/整体架构设计.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/架构设计.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/模块设计/存储模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/模块设计/模块设计.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/模块设计/游戏模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/模块设计/空间模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/模块设计/订单模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/模块设计/认证模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/架构设计/组件架构设计.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/样式系统.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/用户端功能/AI助手模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/用户端功能/个人中心模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/用户端功能/游戏浏览模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/用户端功能/游戏详情模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/用户端功能/用户端功能.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/用户端功能/预约管理模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/用户端功能/首页模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/管理员端功能/游戏管理/游戏列表管理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/管理员端功能/游戏管理/游戏管理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/管理员端功能/游戏管理/游戏详情编辑.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/管理员端功能/游戏详情管理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/管理员端功能/管理员工作台.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/管理员端功能/管理员端功能.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/管理员端功能/预约管理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/组件系统/导航栏组件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/组件系统/时间网格组件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/组件系统/游戏卡片组件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/组件系统/空状态组件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/组件系统/组件系统.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/组件系统/聊天气泡组件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/自定义TabBar.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/认证模块.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/content/项目概述.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.qoder/repowiki/zh/meta/repowiki-metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="3GvUm5nVHdg44w9kOb3qvWxzzO5" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/code/boardGameFront&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="df955e5d-d162-4c00-a35c-ab6298c3ded3" name="更改" comment="" />
+      <created>1784851696327</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1784851696327</updated>
+      <workItem from="1784851699437" duration="32000" />
+      <workItem from="1785111164694" duration="304000" />
+      <workItem from="1785153776356" duration="111000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

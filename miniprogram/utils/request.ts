@@ -1,5 +1,8 @@
 import { BASE_URL } from '../config'
-import { getToken, clearToken } from './auth'
+import { getToken, clearToken, goLogin } from './auth'
+
+/** 防止多个请求同时 401 时重复跳转 */
+let isRedirectingToLogin = false
 
 /** 后端统一响应结构 */
 interface ApiResponse<T = any> {
@@ -47,6 +50,7 @@ export function request<T = any>(options: RequestOptions): Promise<T> {
           if (!options.silent) {
             wx.showToast({ title: '登录已过期，请重新登录', icon: 'none' })
           }
+          redirectToLogin()
           reject(new Error('未授权'))
           return
         }
@@ -67,6 +71,17 @@ export function request<T = any>(options: RequestOptions): Promise<T> {
       },
     })
   })
+}
+
+/** 401 时跳转到登录页（带防重复机制） */
+function redirectToLogin() {
+  if (isRedirectingToLogin) return
+  isRedirectingToLogin = true
+  goLogin()
+  // 延迟重置标志，避免同一批次的多个 401 响应重复触发跳转
+  setTimeout(() => {
+    isRedirectingToLogin = false
+  }, 1000)
 }
 
 /** GET 请求 */

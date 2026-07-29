@@ -1,0 +1,38 @@
+<view class="login-page">
+  <!-- 品牌区域 -->
+  <view class="login-brand">
+    <view class="brand-icon">🎲</view>
+    <view class="brand-name">桌游空间</view>
+    <view class="brand-desc">发现桌游乐趣，预约你的专属空间</view>
+  </view>
+
+  <!-- 商户选择 -->
+  <view class="tenant-panel" wx:if="{{status === 'selecting'}}">
+    <view class="tenant-label">选择商户</view>
+    <picker mode="selector" range="{{tenantNames}}" value="{{selectedTenantIndex}}" bindchange="onTenantChange">
+      <view class="tenant-picker {{selectedTenantId ? 'selected' : ''}}">
+        <text>{{selectedTenantName || '请选择要登录的商户'}}</text>
+        <text class="picker-arrow">›</text>
+      </view>
+    </picker>
+    <button class="login-btn" bindtap="doLogin" disabled="{{!selectedTenantId}}">微信登录</button>
+  </view>
+
+  <!-- 登录中状态 -->
+  <view class="login-status" wx:elif="{{status === 'loading'}}">
+    <view class="loading-spinner"></view>
+    <text class="status-text">正在微信登录中...</text>
+  </view>
+
+  <!-- 登录失败状态 -->
+  <view class="login-status" wx:elif="{{status === 'error'}}">
+    <view class="error-icon">⚠️</view>
+    <text class="status-text error-text">{{errorMsg}}</text>
+    <button class="retry-btn" bindtap="onRetry">重新登录</button>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="login-footer">
+    <text class="footer-text">登录即代表同意用户协议与隐私政策</text>
+  </view>
+</view>

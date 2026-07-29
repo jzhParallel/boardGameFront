@@ -1,0 +1,12 @@
+schema_version: 1
+module_path: app_entry
+title: 小程序应用入口与全局配置
+scope:
+    - miniprogram/app.ts
+    - miniprogram/app.json
+    - miniprogram/app.scss
+    - miniprogram/config.ts
+    - miniprogram/sitemap.json
+source_files: []
+depends_on: []
+related_to: []

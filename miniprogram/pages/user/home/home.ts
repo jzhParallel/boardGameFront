@@ -1,5 +1,6 @@
 import { getStoreDetail, Store } from '../../../services/store'
 import { DEFAULT_STORE_ID } from '../../../config'
+import { isLoggedIn } from '../../../utils/auth'
 
 Component({
   data: {
@@ -28,6 +29,10 @@ Component({
 
   methods: {
     async loadData() {
+      // 登录守卫：未登录时不发起请求，等待登录流程完成后重新进入
+      if (!isLoggedIn()) {
+        return
+      }
       this.setData({ loading: true })
       try {
         const store = await getStoreDetail(DEFAULT_STORE_ID)

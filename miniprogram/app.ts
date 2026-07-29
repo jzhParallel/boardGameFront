@@ -1,4 +1,3 @@
-import { wxLogin } from './services/auth'
 import { isLoggedIn, getUserInfo } from './utils/auth'
 
 App<IAppOption>({
@@ -8,14 +7,9 @@ App<IAppOption>({
   },
 
   onLaunch() {
-    // 静默微信登录
-    this.silentLogin()
-  },
-
-  /** 微信静默登录 */
-  silentLogin() {
+    // 登录页为入口页，负责登录态校验与微信登录流程
+    // 此处仅恢复已有登录态的用户信息
     if (isLoggedIn()) {
-      // 已有登录态，恢复用户信息
       const info = getUserInfo()
       if (info) {
         this.globalData.userInfo = {
@@ -29,7 +23,6 @@ App<IAppOption>({
         }
         this.globalData.storeId = info.storeId || 1
       }
-      return
     }
 
     wx.login({
