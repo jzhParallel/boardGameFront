@@ -24,28 +24,5 @@ App<IAppOption>({
         this.globalData.storeId = info.storeId || 1
       }
     }
-
-    wx.login({
-      success: (res) => {
-        if (res.code) {
-          wxLogin(res.code)
-            .then((loginRes) => {
-              this.globalData.userInfo = {
-                userId: loginRes.userId,
-                account: loginRes.account,
-                nickname: loginRes.nickname,
-                avatar: loginRes.avatar,
-                role: loginRes.role,
-                tenantId: loginRes.tenantId,
-                storeId: loginRes.storeId,
-              }
-              this.globalData.storeId = loginRes.storeId || 1
-            })
-            .catch((err) => {
-              console.warn('静默登录失败:', err)
-            })
-        }
-      },
-    })
   },
 })

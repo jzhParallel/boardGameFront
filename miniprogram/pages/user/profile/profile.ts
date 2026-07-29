@@ -1,9 +1,8 @@
 import { getOrderPage, BoardOrder } from '../../../services/order'
-import { logout } from '../../../services/auth'
+import { logout, updateAvatar } from '../../../services/auth'
 import { getUserInfo, isStaff, clearToken, goLogin } from '../../../utils/auth'
 import { DEFAULT_STORE_ID } from '../../../config'
 import { uploadImage } from '../../../services/file'
-import { updateAvatar } from '../../../services/auth'
 import { resolveAssetUrl } from '../../../utils/asset'
 
 const app = getApp<IAppOption>()
@@ -132,10 +131,11 @@ Component({
             clearToken()
             app.globalData.userInfo = null
             app.globalData.storeId = 1
-            this.setData({ nickname: '微信用户', orders: [], showStaffEntry: false })
-            goLogin()
-            this.setData({ nickname: '微信用户', avatar: '', orders: [], showStaffEntry: false })
             wx.showToast({ title: '已退出', icon: 'success' })
+            this.setData({ nickname: '微信用户', avatar: '', orders: [], showStaffEntry: false })
+            setTimeout(() => {
+              goLogin()
+            }, 300)
           }
         },
       })
