@@ -1,10 +1,21 @@
-import { getBoardGameDetail, BoardGame } from '../../../services/boardGame'
-import { getStoreGameList, StoreGame } from '../../../services/boardGame'
+import { getBoardGameDetail, getBoardGameRule, BoardGame, BoardGameRule, getStoreGameList, StoreGame } from '../../../services/boardGame'
 import { DEFAULT_STORE_ID } from '../../../config'
+
+function toRichTextNodes(content: string): string {
+  const text = String(content || '').trim()
+  if (!text) return ''
+  if (/<[a-z][\s\S]*>/i.test(text)) return text
+  return text
+    .split(/\n{2,}/)
+    .map(paragraph => `<p>${paragraph.replace(/\n/g, '<br/>')}</p>`)
+    .join('')
+}
 
 Component({
   data: {
     game: null as BoardGame | null,
+    rule: null as BoardGameRule | null,
+    ruleNodes: '',
     storeGame: null as StoreGame | null,
     loading: true,
     stars: [] as number[],
@@ -23,17 +34,25 @@ Component({
     async loadDetail(id: number) {
       this.setData({ loading: true })
       try {
-        const game = await getBoardGameDetail(id)
+        const [game, rule] = await Promise.all([
+          getBoardGameDetail(id),
+          getBoardGameRule(id).catch(() => ({ gameId: id, content: '' })),
+        ])
         const stars = [1, 2, 3, 4, 5].map(i => (i <= game.difficulty ? 1 : 0))
-        this.setData({ game, stars, loading: false })
+        this.setData({
+          game,
+          rule,
+          ruleNodes: toRichTextNodes(rule.content),
+          stars,
+          loading: false,
+        })
 
-        // 查询本店库存
         try {
           const storeGames = await getStoreGameList(DEFAULT_STORE_ID)
           const sg = storeGames.find(s => s.gameId === id) || null
           this.setData({ storeGame: sg })
         } catch (e) {
-          // 库存查询失败不影响主流程
+          // ignore store inventory errors
         }
       } catch (err) {
         console.warn('加载桌游详情失败:', err)

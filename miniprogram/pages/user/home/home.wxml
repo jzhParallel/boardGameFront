@@ -1,5 +1,4 @@
 <scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
-  <!-- 店铺信息卡片 -->
   <view class="store-header">
     <view class="store-info">
       <text class="store-name">{{store.storeName || '桌游空间'}}</text>
@@ -14,11 +13,11 @@
       </view>
     </view>
     <view class="store-badge">
-      <text class="badge-icon">♟</text>
+      <image wx:if="{{store.storeAvatar}}" class="store-avatar" src="{{store.storeAvatar}}" mode="aspectFill" />
+      <text wx:else class="badge-icon">♟</text>
     </view>
   </view>
 
-  <!-- 快捷入口 -->
   <view class="section">
     <view class="section-title"><text>快捷入口</text></view>
     <view class="quick-actions">

@@ -5,6 +5,7 @@ export interface UserInfo {
   userId: number
   account: string
   nickname: string
+  avatar?: string
   role: string // ADMIN | STAFF | CUSTOMER
   tenantId: number
   storeId: number | null

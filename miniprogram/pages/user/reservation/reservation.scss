@@ -17,7 +17,6 @@
   margin-bottom: $spacing-md;
 }
 
-/* 日期选择 */
 .date-scroll {
   width: 100%;
   white-space: nowrap;
@@ -65,7 +64,6 @@
   color: $color-text-light;
 }
 
-/* 空间选择 */
 .space-grid {
   display: flex;
   flex-wrap: wrap;
@@ -95,6 +93,15 @@
   }
 }
 
+.space-image {
+  width: 100%;
+  height: 180rpx;
+  display: block;
+  border-radius: $radius-sm;
+  margin-bottom: $spacing-sm;
+  background: $color-bg-grey;
+}
+
 .space-name {
   display: block;
   font-size: $font-md;
@@ -116,7 +123,6 @@
   color: $color-text-light;
 }
 
-/* 提交 */
 .submit-area {
   padding: $spacing-xl $spacing-lg;
 }

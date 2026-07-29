@@ -1,6 +1,8 @@
 @import '../../../styles/variables.scss';
 
-.page-scroll { height: 100vh; }
+.page-scroll {
+  height: 100vh;
+}
 
 .detail-card {
   margin: $spacing-lg;
@@ -18,23 +20,59 @@
   margin-bottom: $spacing-lg;
 }
 
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.section-title {
+  margin-bottom: 0;
+}
+
+.section-tip {
+  font-size: $font-sm;
+  color: $color-text-light;
+}
+
 .info-row {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: $spacing-md;
   padding: $spacing-sm 0;
   border-bottom: 1rpx solid $color-divider;
-  &:last-child { border-bottom: none; }
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .label {
   font-size: $font-md;
   color: $color-text-secondary;
+  flex-shrink: 0;
 }
 
 .value {
   font-size: $font-md;
   color: $color-text;
   font-weight: 500;
+  text-align: right;
+}
+
+.value-multiline {
+  flex: 1;
+  white-space: normal;
+  line-height: 1.8;
+}
+
+.rule-rich-text {
+  font-size: $font-md;
+  color: $color-text-secondary;
+  line-height: 1.8;
 }
 
 .action-area {

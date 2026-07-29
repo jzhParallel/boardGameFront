@@ -1,12 +1,17 @@
 import { getOrderPage, BoardOrder } from '../../../services/order'
 import { getUserInfo, isStaff, clearToken } from '../../../utils/auth'
 import { DEFAULT_STORE_ID } from '../../../config'
+import { uploadImage } from '../../../services/file'
+import { updateAvatar } from '../../../services/auth'
+import { resolveAssetUrl } from '../../../utils/asset'
 
 Component({
   data: {
     nickname: '微信用户',
+    avatar: '',
     orders: [] as BoardOrder[],
     loading: true,
+    uploadingAvatar: false,
     showStaffEntry: false,
     statusMap: { 0: '进行中', 1: '已完成', 2: '已取消' } as Record<number, string>,
   },
@@ -15,7 +20,10 @@ Component({
     attached() {
       const info = getUserInfo()
       if (info) {
-        this.setData({ nickname: info.nickname || '微信用户' })
+        this.setData({
+          nickname: info.nickname || '微信用户',
+          avatar: resolveAssetUrl(info.avatar),
+        })
       }
       this.loadOrders()
     },
@@ -26,7 +34,6 @@ Component({
       if (typeof this.getTabBar === 'function' && this.getTabBar()) {
         this.getTabBar().setData({ selected: 2 })
       }
-      // 每次显示时检查是否为店员
       this.setData({ showStaffEntry: isStaff() })
     },
   },
@@ -47,8 +54,32 @@ Component({
       wx.navigateTo({ url: '/pages/staff/workbench/workbench' })
     },
 
+    async onUploadAvatar() {
+      if (this.data.uploadingAvatar) return
+      try {
+        const chooseRes = await wx.chooseMedia({
+          count: 1,
+          mediaType: ['image'],
+          sourceType: ['album', 'camera'],
+          sizeType: ['compressed'],
+        })
+        const filePath = chooseRes.tempFiles?.[0]?.tempFilePath
+        if (!filePath) return
+        this.setData({ uploadingAvatar: true })
+        const uploadRes = await uploadImage(filePath)
+        const loginRes = await updateAvatar(uploadRes.url)
+        this.setData({ avatar: resolveAssetUrl(loginRes.avatar) })
+        wx.showToast({ title: '头像已更新', icon: 'success' })
+      } catch (err) {
+        const errMsg = (err as any)?.errMsg || ''
+        if (errMsg.includes('cancel')) return
+        wx.showToast({ title: '上传失败', icon: 'none' })
+      } finally {
+        this.setData({ uploadingAvatar: false })
+      }
+    },
+
     onStaffLogin() {
-      // 简易店员登录弹窗
       wx.showModal({
         title: '店员登录',
         editable: true,
@@ -63,8 +94,12 @@ Component({
                 if (res2.confirm && res2.content) {
                   try {
                     const { login } = require('../../../services/auth')
-                    await login(res.content!, res2.content!)
-                    this.setData({ showStaffEntry: true })
+                    const loginRes = await login(res.content!, res2.content!)
+                    this.setData({
+                      showStaffEntry: true,
+                      nickname: loginRes.nickname || this.data.nickname,
+                      avatar: resolveAssetUrl(loginRes.avatar),
+                    })
                     wx.showToast({ title: '登录成功', icon: 'success' })
                     setTimeout(() => {
                       wx.navigateTo({ url: '/pages/staff/workbench/workbench' })
@@ -87,7 +122,7 @@ Component({
         success: (res) => {
           if (res.confirm) {
             clearToken()
-            this.setData({ nickname: '微信用户', orders: [], showStaffEntry: false })
+            this.setData({ nickname: '微信用户', avatar: '', orders: [], showStaffEntry: false })
             wx.showToast({ title: '已退出', icon: 'success' })
           }
         },

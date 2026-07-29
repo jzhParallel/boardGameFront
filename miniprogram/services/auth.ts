@@ -1,4 +1,4 @@
-import { post } from '../utils/request'
+import { post, put } from '../utils/request'
 import { setToken, setUserInfo, UserInfo } from '../utils/auth'
 
 interface LoginVO {
@@ -6,6 +6,7 @@ interface LoginVO {
   userId: number
   account: string
   nickname: string
+  avatar?: string
   role: string
   tenantId: number
   storeId: number | null
@@ -19,6 +20,7 @@ export async function wxLogin(code: string): Promise<LoginVO> {
     userId: res.userId,
     account: res.account,
     nickname: res.nickname,
+    avatar: res.avatar,
     role: res.role,
     tenantId: res.tenantId,
     storeId: res.storeId,
@@ -35,6 +37,7 @@ export async function login(account: string, password: string): Promise<LoginVO>
     userId: res.userId,
     account: res.account,
     nickname: res.nickname,
+    avatar: res.avatar,
     role: res.role,
     tenantId: res.tenantId,
     storeId: res.storeId,
@@ -46,4 +49,19 @@ export async function login(account: string, password: string): Promise<LoginVO>
 /** 退出登录 */
 export function logout(): Promise<void> {
   return post<void>('/api/auth/logout')
+}
+
+export async function updateAvatar(avatar: string): Promise<LoginVO> {
+  const res = await put<LoginVO>('/api/auth/profile/avatar', { avatar })
+  const userInfo: UserInfo = {
+    userId: res.userId,
+    account: res.account,
+    nickname: res.nickname,
+    avatar: res.avatar,
+    role: res.role,
+    tenantId: res.tenantId,
+    storeId: res.storeId,
+  }
+  setUserInfo(userInfo)
+  return res
 }

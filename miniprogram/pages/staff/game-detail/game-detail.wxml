@@ -1,12 +1,22 @@
 <scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
   <block wx:if="{{game || storeGame}}">
     <view class="detail-card">
-      <text class="game-name">{{game.gameName || '桌游详情'}}</text>
-      <view class="info-row"><text class="label">分类</text><text class="value">{{game.category || '-'}}</text></view>
-      <view class="info-row"><text class="label">存放位置</text><text class="value">{{storeGame.location || '未设置'}}</text></view>
-      <view class="info-row"><text class="label">库存数量</text><text class="value">{{storeGame.quantity || 0}}</text></view>
+      <text class="game-name">{{game && game.gameName ? game.gameName : '桌游详情'}}</text>
+      <view class="info-row"><text class="label">分类</text><text class="value">{{game && game.category ? game.category : '-'}}</text></view>
+      <view class="info-row"><text class="label">存放位置</text><text class="value">{{storeGame && storeGame.location ? storeGame.location : '未设置'}}</text></view>
+      <view class="info-row"><text class="label">库存数量</text><text class="value">{{storeGame && storeGame.quantity ? storeGame.quantity : 0}}</text></view>
       <view class="info-row" wx:if="{{game}}"><text class="label">人数</text><text class="value">{{game.minPlayers}}-{{game.maxPlayers}}人</text></view>
       <view class="info-row" wx:if="{{game}}"><text class="label">时长</text><text class="value">{{game.playTime}}分钟</text></view>
+      <view class="info-row" wx:if="{{game}}"><text class="label">简介</text><text class="value value-multiline">{{game.description || '暂无简介'}}</text></view>
+    </view>
+
+    <view class="detail-card">
+      <view class="section-head">
+        <text class="game-name section-title">桌游规则</text>
+        <text class="section-tip">与后台规则同步</text>
+      </view>
+      <rich-text wx:if="{{ruleNodes}}" class="rule-rich-text" nodes="{{ruleNodes}}"></rich-text>
+      <text wx:else class="value value-multiline">暂无规则内容</text>
     </view>
 
     <view class="action-area">

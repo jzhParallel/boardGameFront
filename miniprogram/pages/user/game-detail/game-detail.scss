@@ -80,6 +80,14 @@
   box-shadow: $shadow-sm;
 }
 
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
 .section-title {
   font-size: $font-lg;
   font-weight: 600;
@@ -88,7 +96,22 @@
   margin-bottom: $spacing-md;
 }
 
+.section-head .section-title {
+  margin-bottom: 0;
+}
+
+.section-tip {
+  font-size: $font-sm;
+  color: $color-text-light;
+}
+
 .description {
+  font-size: $font-md;
+  color: $color-text-secondary;
+  line-height: 1.8;
+}
+
+.rule-rich-text {
   font-size: $font-md;
   color: $color-text-secondary;
   line-height: 1.8;

@@ -1,4 +1,5 @@
 import { get } from '../utils/request'
+import { resolveAssetUrl } from '../utils/asset'
 
 export interface BoardGame {
   id: number
@@ -8,10 +9,16 @@ export interface BoardGame {
   maxPlayers: number
   playTime: number
   minAge: number
-  difficulty: number // 1-5
+  difficulty: number
   coverImage: string
   description: string
-  status: number // 1正常 0下架
+  status: number
+}
+
+export interface BoardGameRule {
+  id?: number
+  gameId: number
+  content: string
 }
 
 export interface StoreGame {
@@ -30,22 +37,36 @@ export interface PageResult<T> {
   pages: number
 }
 
-/** 分页查询桌游 */
 export function getBoardGamePage(params: {
   current?: number
   size?: number
   keyword?: string
   category?: string
 }): Promise<PageResult<BoardGame>> {
-  return get<PageResult<BoardGame>>('/api/board-game/page', params)
+  return get<PageResult<BoardGame>>('/api/board-game/page', params).then(res => ({
+    ...res,
+    records: (res.records || []).map(normalizeBoardGame),
+  }))
 }
 
-/** 获取桌游详情 */
 export function getBoardGameDetail(id: number): Promise<BoardGame> {
-  return get<BoardGame>(`/api/board-game/${id}`)
+  return get<BoardGame>(`/api/board-game/${id}`).then(normalizeBoardGame)
 }
 
-/** 获取店铺桌游库存列表 */
+export function getBoardGameRule(id: number): Promise<BoardGameRule> {
+  return get<BoardGameRule>(`/api/board-game/${id}/rule`).then(rule => ({
+    ...rule,
+    content: rule?.content || '',
+  }))
+}
+
 export function getStoreGameList(storeId: number): Promise<StoreGame[]> {
   return get<StoreGame[]>('/api/board-game/store-game/list', { storeId })
+}
+
+function normalizeBoardGame(game: BoardGame): BoardGame {
+  return {
+    ...game,
+    coverImage: resolveAssetUrl(game?.coverImage),
+  }
 }
