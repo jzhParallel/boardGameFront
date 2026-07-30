@@ -1,5 +1,6 @@
 import { get, post, put } from '../utils/request'
 import { PageResult } from './boardGame'
+import { PricingRuleType } from './space'
 
 export interface BoardOrder {
   id: number
@@ -10,7 +11,7 @@ export interface BoardOrder {
   startTime: string
   endTime: string
   totalAmount: number
-  status: number // 0进行中 1已完成 2已取消
+  status: number
   remark: string
   createTime: string
 }
@@ -32,23 +33,33 @@ export interface CreateOrderDTO {
   customerId: number
   customerName: string
   startTime: string
-  endTime: string
+  endTime?: string
+  packageHours?: number
   totalAmount: number
   remark?: string
   gameIds?: number[]
 }
 
-/** 创建订单 */
+export interface OrderAmountPreview {
+  totalAmount: number
+  pricingRuleType: PricingRuleType
+  pricingDescription: string
+  startTime: string
+  endTime: string
+}
+
 export function createOrder(data: CreateOrderDTO): Promise<BoardOrder> {
   return post<BoardOrder>('/api/order', data)
 }
 
-/** 获取订单详情（含桌游） */
+export function previewOrderAmount(data: CreateOrderDTO): Promise<OrderAmountPreview> {
+  return post<OrderAmountPreview>('/api/order/preview-amount', data)
+}
+
 export function getOrderDetail(id: number): Promise<OrderVO> {
   return get<OrderVO>(`/api/order/${id}`)
 }
 
-/** 分页查询订单 */
 export function getOrderPage(params: {
   current?: number
   size?: number
@@ -58,12 +69,10 @@ export function getOrderPage(params: {
   return get<PageResult<BoardOrder>>('/api/order/page', params)
 }
 
-/** 完成订单 */
 export function completeOrder(id: number): Promise<void> {
   return put<void>(`/api/order/${id}/complete`)
 }
 
-/** 取消订单 */
 export function cancelOrder(id: number): Promise<void> {
   return put<void>(`/api/order/${id}/cancel`)
 }

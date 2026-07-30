@@ -30,19 +30,28 @@
         <image wx:if="{{item.spaceImage}}" class="space-image" src="{{item.spaceImage}}" mode="aspectFill" />
         <text class="space-name">{{item.spaceName}}</text>
         <text class="space-type">{{item.spaceType === 'PRIVATE_ROOM' ? '包厢' : item.spaceType === 'HALL' ? '大厅' : '桌位'}}</text>
-        <text class="space-cap">{{item.capacity}}人 · ￥{{item.pricePerHour}}/时</text>
+        <text class="space-cap">{{item.capacity}}人</text>
+        <text class="space-price">{{item.pricingText}}</text>
+        <text wx:if="{{item.capacityControlEnabled}}" class="space-limit">时段人数上限：{{item.maxConcurrentBookings}}人</text>
       </view>
     </view>
-    <empty-state wx:if="{{!spaces.length && !loading}}" text="暂无可用空间" icon="🪑" />
+    <empty-state wx:if="{{!spaces.length && !loading}}" text="暂无可用空间" icon="🎲" />
   </view>
 
   <view class="section" wx:if="{{selectedSpace}}">
-    <view class="section-title"><text>选择时段</text></view>
+    <view class="section-title">
+      <text>{{selectedSpace.pricingRuleType === 'TICKET' ? '选择到店时间' : '选择预约时段'}}</text>
+    </view>
+    <view class="pricing-panel">
+      <text class="pricing-title">当前计价方式</text>
+      <text class="pricing-desc">{{selectedSpace.pricingText}}</text>
+      <text wx:if="{{selectedSpace.pricingRuleType === 'PACKAGE'}}" class="pricing-tip">请选择与套餐时长一致的时间段，例如 4 小时或 6 小时。</text>
+      <text wx:if="{{selectedSpace.pricingRuleType === 'TICKET'}}" class="pricing-tip">门票制按当天一次收费，提交时会自动补全闭店时间。</text>
+    </view>
     <time-grid
       start-time="10:00"
       end-time="22:00"
       occupied-slots="{{occupiedSlots}}"
-      my-reserved-slots="{{myReservedSlots}}"
       bind:change="onTimeChange"
     />
   </view>

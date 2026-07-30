@@ -42,7 +42,8 @@
     background: $color-primary;
     color: $color-text-white;
 
-    .date-label, .date-value {
+    .date-label,
+    .date-value {
       color: $color-text-white;
     }
   }
@@ -110,15 +111,46 @@
   margin-bottom: 6rpx;
 }
 
-.space-type {
+.space-type,
+.space-cap,
+.space-price,
+.space-limit {
   display: block;
-  font-size: $font-sm;
+  font-size: $font-xs;
   color: $color-text-secondary;
   margin-bottom: 4rpx;
 }
 
-.space-cap {
+.space-price {
+  color: $color-primary;
+  font-weight: 600;
+}
+
+.pricing-panel {
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  border-radius: $radius-md;
+  background: rgba(45, 90, 69, 0.06);
+}
+
+.pricing-title {
   display: block;
+  font-size: $font-sm;
+  font-weight: 600;
+  color: $color-text;
+  margin-bottom: 6rpx;
+}
+
+.pricing-desc {
+  display: block;
+  font-size: $font-sm;
+  color: $color-primary;
+  font-weight: 600;
+}
+
+.pricing-tip {
+  display: block;
+  margin-top: 8rpx;
   font-size: $font-xs;
   color: $color-text-light;
 }

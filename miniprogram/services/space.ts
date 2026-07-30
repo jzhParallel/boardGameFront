@@ -2,28 +2,39 @@ import { get, put } from '../utils/request'
 import { PageResult } from './boardGame'
 import { resolveAssetUrl } from '../utils/asset'
 
+export type PricingRuleType = 'HOURLY' | 'PACKAGE' | 'TICKET'
+
+export interface PricingPackageRule {
+  hours: number
+  price: number
+}
+
 export interface Space {
   id: number
   storeId: number
   spaceName: string
-  spaceType: string // PRIVATE_ROOM | HALL | TABLE
+  spaceType: string
   spaceImage: string
   capacity: number
   pricePerHour: number
-  status: number // 0空闲 1使用中 2维护中
+  capacityControlEnabled: boolean
+  maxConcurrentBookings: number
+  pricingRuleType: PricingRuleType
+  packageRulesJson: string
+  packageRules: PricingPackageRule[]
+  ticketPrice: number
+  status: number
   remark: string
 }
 
 export interface SpaceOrder {
   id: number
   spaceId: number
-  customerId: number
   startTime: string
   endTime: string
   status: number
 }
 
-/** 空间+时间范围内订单列表 */
 export interface SpaceVO extends Space {
   orders: SpaceOrder[]
 }
@@ -31,17 +42,15 @@ export interface SpaceVO extends Space {
 export interface SpaceAvailableParams {
   storeId: number
   spaceType?: string
-  queryDate?: string // YYYY-MM-DD
+  queryDate?: string
   current?: number
   size?: number
 }
 
-/** 获取店铺空间列表 */
 export function getSpaceList(storeId: number): Promise<Space[]> {
   return get<Space[]>('/api/space/list', { storeId }).then(list => (list || []).map(normalizeSpace))
 }
 
-/** 空闲时间分页查询（空间+时间范围内订单列表） */
 export function getSpaceAvailable(params: SpaceAvailableParams): Promise<PageResult<SpaceVO>> {
   return get<PageResult<SpaceVO>>('/api/space/available', params).then(res => ({
     ...res,
@@ -49,12 +58,10 @@ export function getSpaceAvailable(params: SpaceAvailableParams): Promise<PageRes
   }))
 }
 
-/** 获取空间详情 */
 export function getSpaceDetail(id: number): Promise<Space> {
   return get<Space>(`/api/space/${id}`).then(normalizeSpace)
 }
 
-/** 更新空间状态 */
 export function updateSpaceStatus(id: number, status: number): Promise<void> {
   return put<void>(`/api/space/${id}/status?status=${status}`)
 }
@@ -63,5 +70,18 @@ function normalizeSpace<T extends Space>(space: T): T {
   return {
     ...space,
     spaceImage: resolveAssetUrl(space?.spaceImage),
+    capacityControlEnabled: Boolean(space?.capacityControlEnabled),
+    pricingRuleType: (space?.pricingRuleType || 'HOURLY') as PricingRuleType,
+    packageRules: parsePackageRules(space?.packageRulesJson),
+  }
+}
+
+function parsePackageRules(packageRulesJson?: string): PricingPackageRule[] {
+  if (!packageRulesJson) return []
+  try {
+    const rules = JSON.parse(packageRulesJson)
+    return Array.isArray(rules) ? rules : []
+  } catch (error) {
+    return []
   }
 }

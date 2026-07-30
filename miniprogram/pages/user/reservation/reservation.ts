@@ -1,9 +1,7 @@
-import { getSpaceAvailable, SpaceVO } from '../../../services/space'
-import { createOrder } from '../../../services/order'
+import { getSpaceAvailable, PricingPackageRule, SpaceVO } from '../../../services/space'
+import { createOrder, previewOrderAmount } from '../../../services/order'
 import { DEFAULT_STORE_ID } from '../../../config'
 import { getUserInfo } from '../../../utils/auth'
-
-const app = getApp<IAppOption>()
 
 Component({
   data: {
@@ -12,32 +10,19 @@ Component({
     spaces: [] as SpaceVO[],
     selectedSpace: null as SpaceVO | null,
     occupiedSlots: [] as string[],
-    myReservedSlots: [] as string[],
     selectedStart: '',
     selectedEnd: '',
-    currentStoreId: 0,
     submitting: false,
     loading: true,
   },
 
   lifetimes: {
     attached() {
-      this.initCurrentStoreId()
       this.initDates()
     },
   },
 
   methods: {
-    /** 生成未来7天日期 */
-    initCurrentStoreId() {
-      const pages = getCurrentPages()
-      const currentPage = pages[pages.length - 1] as any
-      const routeStoreId = Number(currentPage.options?.storeId || 0)
-      const currentStoreId = routeStoreId || app.globalData.storeId || DEFAULT_STORE_ID
-      this.setData({ currentStoreId })
-      app.globalData.storeId = currentStoreId
-    },
-
     initDates() {
       const dates: { label: string; value: string }[] = []
       const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
@@ -55,64 +40,72 @@ Component({
       this.loadSpaces()
     },
 
-    /** 调用后端空闲时间查询接口 */
     async loadSpaces() {
       this.setData({ loading: true })
       try {
         const res = await getSpaceAvailable({
-          storeId: this.getCurrentStoreId(),
+          storeId: DEFAULT_STORE_ID,
           queryDate: this.data.selectedDate,
           size: 100,
         })
-        this.setData({ spaces: res.records, loading: false })
+        this.setData({
+          spaces: res.records.map(item => ({
+            ...item,
+            pricingText: this.buildPricingText(item),
+          })),
+          loading: false,
+        })
       } catch (err) {
         console.warn('加载空间失败:', err)
         this.setData({ loading: false })
       }
     },
 
-    onSelectDate(e: any) {
-      const { value } = e.currentTarget.dataset
-      this.setData({
-        selectedDate: value,
-        selectedSpace: null,
-        occupiedSlots: [],
-        myReservedSlots: [],
-        selectedStart: '',
-        selectedEnd: '',
-      })
+    onSelectDate(e: WechatMiniprogram.BaseEvent) {
+      const { value } = e.currentTarget.dataset as { value: string }
+      this.setData({ selectedDate: value, selectedSpace: null, occupiedSlots: [], selectedStart: '', selectedEnd: '' })
       this.loadSpaces()
     },
 
-    onSelectSpace(e: any) {
-      const { id } = e.currentTarget.dataset
+    onSelectSpace(e: WechatMiniprogram.BaseEvent) {
+      const { id } = e.currentTarget.dataset as { id: number }
       const space = this.data.spaces.find(s => s.id === id) || null
       this.setData({ selectedSpace: space, selectedStart: '', selectedEnd: '' })
-      if (space) {
-        this.extractReservedSlots(space)
-      }
+      if (space) this.extractOccupiedSlots(space)
     },
 
-    /** 从后端返回的订单列表中提取别人占用和我的预约时段 */
-    extractReservedSlots(space: SpaceVO) {
-      const occupied: string[] = []
-      const myReserved: string[] = []
-      const currentUserId = getUserInfo()?.userId
-      if (space.orders && space.orders.length > 0) {
-        space.orders.forEach(order => {
-          const start = (order.startTime || '').substring(11, 16)
-          const end = (order.endTime || '').substring(11, 16)
-          if (!start || !end) return
-          const isMine = !!currentUserId && Number(order.customerId) === Number(currentUserId)
-          const targetSlots = isMine ? myReserved : occupied
-          const startMin = this.timeToMinutes(start)
-          const endMin = this.timeToMinutes(end)
-          for (let m = startMin; m < endMin; m += 30) {
-            targetSlots.push(this.minutesToTime(m))
-          }
-        })
+    extractOccupiedSlots(space: SpaceVO) {
+      if (!space.orders || space.orders.length === 0) {
+        this.setData({ occupiedSlots: [] })
+        return
       }
-      this.setData({ occupiedSlots: occupied, myReservedSlots: myReserved })
+      if (space.capacityControlEnabled && space.maxConcurrentBookings > 0) {
+        const countMap: Record<string, number> = {}
+        space.orders.forEach(order => {
+          this.walkOrderSlots(order.startTime, order.endTime, slot => {
+            countMap[slot] = (countMap[slot] || 0) + 1
+          })
+        })
+        const occupied = Object.keys(countMap).filter(slot => countMap[slot] >= space.maxConcurrentBookings)
+        this.setData({ occupiedSlots: occupied })
+        return
+      }
+      const occupied: string[] = []
+      space.orders.forEach(order => {
+        this.walkOrderSlots(order.startTime, order.endTime, slot => occupied.push(slot))
+      })
+      this.setData({ occupiedSlots: occupied })
+    },
+
+    walkOrderSlots(startTime: string, endTime: string, callback: (slot: string) => void) {
+      const start = (startTime || '').substring(11, 16)
+      const end = (endTime || '').substring(11, 16)
+      if (!start || !end) return
+      const startMin = this.timeToMinutes(start)
+      const endMin = this.timeToMinutes(end)
+      for (let m = startMin; m < endMin; m += 30) {
+        callback(this.minutesToTime(m))
+      }
     },
 
     timeToMinutes(t: string): number {
@@ -126,7 +119,7 @@ Component({
       return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
     },
 
-    onTimeChange(e: any) {
+    onTimeChange(e: WechatMiniprogram.CustomEvent<{ start: string; end: string }>) {
       const { start, end } = e.detail
       this.setData({ selectedStart: start, selectedEnd: end })
     },
@@ -137,32 +130,52 @@ Component({
         wx.showToast({ title: '请选择空间', icon: 'none' })
         return
       }
-      if (!selectedStart || !selectedEnd) {
-        wx.showToast({ title: '请选择时段', icon: 'none' })
+      if (!selectedStart) {
+        wx.showToast({ title: '请选择到店时间', icon: 'none' })
+        return
+      }
+      if (selectedSpace.pricingRuleType !== 'TICKET' && !selectedEnd) {
+        wx.showToast({ title: '请选择结束时间', icon: 'none' })
+        return
+      }
+
+      const matchedPackage = this.resolveMatchedPackage(selectedSpace, selectedStart, selectedEnd)
+      if (selectedSpace.pricingRuleType === 'PACKAGE' && !matchedPackage) {
+        wx.showToast({ title: '套餐空间请选择已配置的预约时长', icon: 'none' })
         return
       }
 
       const userInfo = getUserInfo()
+      const payload = {
+        storeId: DEFAULT_STORE_ID,
+        spaceId: selectedSpace.id,
+        customerId: userInfo?.userId || 0,
+        customerName: userInfo?.nickname || '微信用户',
+        startTime: `${selectedDate}T${selectedStart}:00`,
+        endTime: selectedEnd ? `${selectedDate}T${selectedEnd}:00` : undefined,
+        packageHours: matchedPackage?.hours,
+        totalAmount: 0,
+        remark: '用户预约',
+      }
+
       this.setData({ submitting: true })
       try {
+        const preview = await previewOrderAmount(payload)
+        const confirmed = await this.confirmAmount(selectedSpace, preview.totalAmount, preview.pricingDescription, preview.startTime, preview.endTime)
+        if (!confirmed) return
+
         await createOrder({
-          storeId: selectedSpace.storeId || this.getCurrentStoreId(),
-          spaceId: selectedSpace.id,
-          customerId: userInfo?.userId || 0,
-          customerName: userInfo?.nickname || '微信用户',
-          startTime: `${selectedDate}T${selectedStart}:00`,
-          endTime: `${selectedDate}T${selectedEnd}:00`,
-          totalAmount: 0,
-          remark: '用户预约',
+          ...payload,
+          totalAmount: preview.totalAmount,
+          endTime: preview.endTime,
         })
-        wx.showToast({ title: '预约成功！', icon: 'success' })
-        this.setData({ selectedStart: '', selectedEnd: '', occupiedSlots: [], myReservedSlots: [] })
-        // 重新加载空间数据
+        wx.showToast({ title: '预约成功', icon: 'success' })
+        this.setData({ selectedStart: '', selectedEnd: '', occupiedSlots: [] })
         await this.loadSpaces()
         const updated = this.data.spaces.find(s => s.id === selectedSpace.id)
         if (updated) {
           this.setData({ selectedSpace: updated })
-          this.extractReservedSlots(updated)
+          this.extractOccupiedSlots(updated)
         }
       } catch (err) {
         console.warn('预约失败:', err)
@@ -171,8 +184,33 @@ Component({
       }
     },
 
-    getCurrentStoreId(): number {
-      return this.data.currentStoreId || app.globalData.storeId || DEFAULT_STORE_ID
+    resolveMatchedPackage(space: SpaceVO, selectedStart: string, selectedEnd: string): PricingPackageRule | undefined {
+      if (space.pricingRuleType !== 'PACKAGE' || !selectedStart || !selectedEnd) return undefined
+      const duration = this.timeToMinutes(selectedEnd) - this.timeToMinutes(selectedStart)
+      return space.packageRules.find(item => item.hours * 60 === duration)
+    },
+
+    confirmAmount(space: SpaceVO, amount: number, description: string, startTime: string, endTime: string): Promise<boolean> {
+      return new Promise(resolve => {
+        wx.showModal({
+          title: '确认预约',
+          content: `${space.spaceName}\n${description}\n${startTime.replace('T', ' ')} - ${endTime.replace('T', ' ')}\n应支付：¥${Number(amount).toFixed(2)}`,
+          confirmText: '确认支付',
+          cancelText: '再看看',
+          success: res => resolve(Boolean(res.confirm)),
+          fail: () => resolve(false),
+        })
+      })
+    },
+
+    buildPricingText(space: SpaceVO) {
+      if (space.pricingRuleType === 'PACKAGE') {
+        return space.packageRules.map(item => `${item.hours}小时 ¥${item.price}`).join(' / ') || '按套餐计价'
+      }
+      if (space.pricingRuleType === 'TICKET') {
+        return `门票制 ¥${space.ticketPrice || 0}/人，当日不限时`
+      }
+      return `按时计价 ¥${space.pricePerHour || 0}/小时`
     },
   },
 })
