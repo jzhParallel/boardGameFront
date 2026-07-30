@@ -1,7 +1,17 @@
-<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
-  <view class="section">
-    <view class="section-title"><text>选择日期</text></view>
-    <scroll-view class="date-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+<view class="reservation-page">
+<scroll-view class="page-scroll {{timeExpanded ? 'time-mode' : ''}}" scroll-y="{{!timeExpanded}}" enhanced show-scrollbar="{{false}}" scroll-top="{{pageScrollTop}}" scroll-with-animation>
+  <view class="section {{dateExpanded ? 'expanded' : 'collapsed'}}">
+    <view
+      class="section-title step-action {{dateExpanded ? 'expanded' : 'collapsed'}}"
+      bindtap="onEditBaseSelection"
+      hover-class="section-title--pressed"
+      hover-stay-time="80"
+    >
+      <view class="step-index">1</view>
+      <text class="section-title-text">选择日期</text>
+      <text wx:if="{{!dateExpanded && selectedDate}}" class="section-summary">{{selectedDate}}</text>
+    </view>
+    <scroll-view wx:if="{{dateExpanded}}" class="date-scroll section-body" scroll-x enhanced show-scrollbar="{{false}}">
       <view class="date-list">
         <view
           wx:for="{{dates}}"
@@ -9,6 +19,8 @@
           class="date-item {{selectedDate === item.value ? 'active' : ''}}"
           data-value="{{item.value}}"
           bindtap="onSelectDate"
+          hover-class="date-item--pressed"
+          hover-stay-time="80"
         >
           <text class="date-label">{{item.label}}</text>
           <text class="date-value">{{item.value}}</text>
@@ -17,48 +29,82 @@
     </scroll-view>
   </view>
 
-  <view class="section">
-    <view class="section-title"><text>选择空间</text></view>
-    <view class="space-grid">
+  <view class="section {{spaceExpanded ? 'expanded' : 'collapsed'}}">
+    <view
+      class="section-title step-action {{spaceExpanded ? 'expanded' : 'collapsed'}}"
+      bindtap="onEditBaseSelection"
+      hover-class="section-title--pressed"
+      hover-stay-time="80"
+    >
+      <view class="step-index">2</view>
+      <text class="section-title-text">选择空间</text>
+      <text wx:if="{{!spaceExpanded && selectedSpace}}" class="section-summary">{{selectedSpace.spaceName}}</text>
+    </view>
+    <view wx:if="{{spaceExpanded}}" class="space-grid section-body">
       <view
         wx:for="{{spaces}}"
         wx:key="id"
         class="space-item {{selectedSpace && selectedSpace.id === item.id ? 'active' : ''}} {{item.status === 2 ? 'disabled' : ''}}"
         data-id="{{item.id}}"
         bindtap="onSelectSpace"
+        hover-class="space-item--pressed"
+        hover-stay-time="80"
       >
-        <image wx:if="{{item.spaceImage}}" class="space-image" src="{{item.spaceImage}}" mode="aspectFill" />
-        <text class="space-name">{{item.spaceName}}</text>
-        <text class="space-type">{{item.spaceType === 'PRIVATE_ROOM' ? '包厢' : item.spaceType === 'HALL' ? '大厅' : '桌位'}}</text>
-        <text class="space-cap">{{item.capacity}}人</text>
-        <text class="space-price">{{item.pricingText}}</text>
-        <text wx:if="{{item.capacityControlEnabled}}" class="space-limit">时段人数上限：{{item.maxConcurrentBookings}}人</text>
+        <view class="space-image-wrap">
+          <image wx:if="{{item.spaceImage}}" class="space-image" src="{{item.spaceImage}}" mode="aspectFill" />
+          <view wx:else class="space-image-placeholder"></view>
+          <text wx:if="{{selectedSpace && selectedSpace.id === item.id}}" class="space-selected-badge">已选</text>
+          <text wx:if="{{item.status === 2}}" class="space-disabled-badge">维护中</text>
+        </view>
+        <view class="space-content">
+          <text class="space-name">{{item.spaceName}}</text>
+          <view class="space-meta-row">
+            <text class="space-type">{{item.spaceType === 'PRIVATE_ROOM' ? '包厢' : item.spaceType === 'HALL' ? '大厅' : '桌位'}}</text>
+            <text class="space-cap">{{item.capacity}}人</text>
+          </view>
+          <text class="space-price">{{item.pricingText}}</text>
+          <text wx:if="{{item.capacityControlEnabled}}" class="space-limit">时段人数上限：{{item.maxConcurrentBookings}}人</text>
+        </view>
       </view>
     </view>
-    <empty-state wx:if="{{!spaces.length && !loading}}" text="暂无可用空间" icon="🎲" />
+    <empty-state wx:if="{{spaceExpanded && !spaces.length && !loading}}" text="暂无可用空间" icon="□" />
   </view>
 
-  <view class="section" wx:if="{{selectedSpace}}">
-    <view class="section-title">
-      <text>{{selectedSpace.pricingRuleType === 'TICKET' ? '选择到店时间' : '选择预约时段'}}</text>
+  <view class="section time-section {{timeExpanded ? 'expanded' : 'collapsed'}}">
+    <view class="section-title time-title {{timeExpanded ? 'expanded' : 'collapsed'}}">
+      <view class="step-index">3</view>
+      <text class="section-title-text">{{selectedSpace && selectedSpace.pricingRuleType === 'TICKET' ? '选择到店时间' : '选择预约时段'}}</text>
+      <text wx:if="{{!timeExpanded}}" class="section-summary">{{selectedSpace ? '待选择时间' : '先选择日期和空间'}}</text>
     </view>
+    <view wx:if="{{selectedSpace && timeExpanded}}" class="section-body time-body">
     <view class="pricing-panel">
-      <text class="pricing-title">当前计价方式</text>
-      <text class="pricing-desc">{{selectedSpace.pricingText}}</text>
+      <view class="pricing-header">
+        <text class="pricing-title">当前计价方式</text>
+        <text class="pricing-desc">{{selectedSpace.pricingText}}</text>
+      </view>
       <text wx:if="{{selectedSpace.pricingRuleType === 'PACKAGE'}}" class="pricing-tip">请选择与套餐时长一致的时间段，例如 4 小时或 6 小时。</text>
       <text wx:if="{{selectedSpace.pricingRuleType === 'TICKET'}}" class="pricing-tip">门票制按当天一次收费，提交时会自动补全闭店时间。</text>
     </view>
     <time-grid
       start-time="10:00"
       end-time="22:00"
+      selected-date="{{selectedDate}}"
       occupied-slots="{{occupiedSlots}}"
       bind:change="onTimeChange"
     />
-  </view>
-
-  <view class="submit-area" wx:if="{{selectedSpace}}">
-    <button class="btn-primary submit-btn" bindtap="onSubmit" disabled="{{submitting}}">
-      {{submitting ? '提交中...' : '确认预约'}}
-    </button>
+    </view>
   </view>
 </scroll-view>
+
+<view class="submit-area safe-bottom" wx:if="{{selectedSpace && timeExpanded}}">
+  <button
+    class="btn-primary submit-btn {{canSubmit ? 'ready' : 'waiting'}}"
+    bindtap="onSubmit"
+    disabled="{{submitting}}"
+    hover-class="submit-btn--pressed"
+    hover-stay-time="80"
+  >
+    {{submitting ? '提交中...' : '确认预约'}}
+  </button>
+</view>
+</view>

@@ -10,6 +10,7 @@ Component({
     storeNames: [] as string[],
     selectedStoreIndex: 0,
     loading: true,
+    showStoreModal: false,
     quickActions: [
       { icon: '▦', text: '预约', path: '/pages/user/reservation/reservation' },
       { icon: '♟', text: '浏览桌游', path: '/pages/user/games/games' },
@@ -69,7 +70,31 @@ Component({
         stores,
         storeNames: stores.map(item => item.storeName),
         selectedStoreIndex: selectedStoreIndex >= 0 ? selectedStoreIndex : 0,
+        showStoreModal: false,
       })
+    },
+
+    onOpenStoreModal() {
+      if (this.data.stores.length === 0) {
+        wx.showToast({ title: '暂无可切换门店', icon: 'none' })
+        return
+      }
+      this.setData({ showStoreModal: true })
+    },
+
+    onCloseStoreModal() {
+      this.setData({ showStoreModal: false })
+    },
+
+    noop() {},
+
+    onStoreSelect(e: WechatMiniprogram.BaseEvent) {
+      const index = Number(e.currentTarget.dataset.index)
+      const store = this.data.stores[index]
+      if (!store) {
+        return
+      }
+      this.setCurrentStore(store)
     },
 
     onStoreChange(e: WechatMiniprogram.CustomEvent<{ value: string }>) {
@@ -84,7 +109,8 @@ Component({
     onQuickAction(e: any) {
       const { path } = e.currentTarget.dataset
       if (path === '/pages/user/reservation/reservation') {
-        wx.navigateTo({ url: `${path}?storeId=${app.globalData.storeId}` })
+        const storeId = this.data.store?.id || app.globalData.currentStore?.id || app.globalData.storeId
+        wx.navigateTo({ url: `${path}?storeId=${storeId}` })
         return
       }
       wx.navigateTo({ url: path })

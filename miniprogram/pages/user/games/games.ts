@@ -4,6 +4,7 @@ Component({
   data: {
     games: [] as BoardGame[],
     keyword: '',
+    searchFocused: false,
     category: '',
     categories: ['全部', '策略', '派对', '推理', '合作', '卡牌', '桌游'],
     current: 1,
@@ -49,6 +50,14 @@ Component({
 
     onSearchInput(e: any) {
       this.setData({ keyword: e.detail.value })
+    },
+
+    onSearchFocus() {
+      this.setData({ searchFocused: true })
+    },
+
+    onSearchBlur() {
+      this.setData({ searchFocused: false })
     },
 
     onSearch() {

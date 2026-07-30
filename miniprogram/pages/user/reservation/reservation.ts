@@ -3,8 +3,11 @@ import { createOrder, previewOrderAmount } from '../../../services/order'
 import { DEFAULT_STORE_ID } from '../../../config'
 import { getUserInfo } from '../../../utils/auth'
 
+const app = getApp<IAppOption>()
+
 Component({
   data: {
+    storeId: DEFAULT_STORE_ID,
     dates: [] as { label: string; value: string }[],
     selectedDate: '',
     spaces: [] as SpaceVO[],
@@ -12,12 +15,18 @@ Component({
     occupiedSlots: [] as string[],
     selectedStart: '',
     selectedEnd: '',
+    canSubmit: false,
+    dateExpanded: true,
+    spaceExpanded: true,
+    timeExpanded: false,
+    pageScrollTop: 0,
     submitting: false,
     loading: true,
   },
 
   lifetimes: {
     attached() {
+      this.setData({ storeId: this.resolveCurrentStoreId() })
       this.initDates()
     },
   },
@@ -44,7 +53,7 @@ Component({
       this.setData({ loading: true })
       try {
         const res = await getSpaceAvailable({
-          storeId: DEFAULT_STORE_ID,
+          storeId: this.getCurrentStoreId(),
           queryDate: this.data.selectedDate,
           size: 100,
         })
@@ -63,15 +72,36 @@ Component({
 
     onSelectDate(e: WechatMiniprogram.BaseEvent) {
       const { value } = e.currentTarget.dataset as { value: string }
-      this.setData({ selectedDate: value, selectedSpace: null, occupiedSlots: [], selectedStart: '', selectedEnd: '' })
+      this.setData({
+        selectedDate: value,
+        selectedSpace: null,
+        occupiedSlots: [],
+        selectedStart: '',
+        selectedEnd: '',
+        canSubmit: false,
+        dateExpanded: true,
+        spaceExpanded: true,
+        timeExpanded: false,
+        pageScrollTop: this.nextPageScrollTop(),
+      })
       this.loadSpaces()
     },
 
     onSelectSpace(e: WechatMiniprogram.BaseEvent) {
       const { id } = e.currentTarget.dataset as { id: number }
       const space = this.data.spaces.find(s => s.id === id) || null
-      this.setData({ selectedSpace: space, selectedStart: '', selectedEnd: '' })
-      if (space) this.extractOccupiedSlots(space)
+      if (!space) return
+      this.setData({
+        selectedSpace: space,
+        selectedStart: '',
+        selectedEnd: '',
+        canSubmit: false,
+        dateExpanded: false,
+        spaceExpanded: false,
+        timeExpanded: true,
+        pageScrollTop: this.nextPageScrollTop(),
+      })
+      this.extractOccupiedSlots(space)
     },
 
     extractOccupiedSlots(space: SpaceVO) {
@@ -121,7 +151,19 @@ Component({
 
     onTimeChange(e: WechatMiniprogram.CustomEvent<{ start: string; end: string }>) {
       const { start, end } = e.detail
-      this.setData({ selectedStart: start, selectedEnd: end })
+      this.setData({ selectedStart: start, selectedEnd: end, canSubmit: this.isSubmitReady(this.data.selectedSpace, start, end) })
+    },
+
+    onEditBaseSelection() {
+      this.setData({
+        selectedStart: '',
+        selectedEnd: '',
+        canSubmit: false,
+        dateExpanded: true,
+        spaceExpanded: true,
+        timeExpanded: false,
+        pageScrollTop: this.nextPageScrollTop(),
+      })
     },
 
     async onSubmit() {
@@ -147,7 +189,7 @@ Component({
 
       const userInfo = getUserInfo()
       const payload = {
-        storeId: DEFAULT_STORE_ID,
+        storeId: this.getCurrentStoreId(),
         spaceId: selectedSpace.id,
         customerId: userInfo?.userId || 0,
         customerName: userInfo?.nickname || '微信用户',
@@ -170,7 +212,7 @@ Component({
           endTime: preview.endTime,
         })
         wx.showToast({ title: '预约成功', icon: 'success' })
-        this.setData({ selectedStart: '', selectedEnd: '', occupiedSlots: [] })
+        this.setData({ selectedStart: '', selectedEnd: '', occupiedSlots: [], canSubmit: false })
         await this.loadSpaces()
         const updated = this.data.spaces.find(s => s.id === selectedSpace.id)
         if (updated) {
@@ -203,6 +245,21 @@ Component({
       })
     },
 
+    resolveCurrentStoreId(): number {
+      const pages = getCurrentPages()
+      const currentPage = pages[pages.length - 1] as any
+      const routeStoreId = Number(currentPage.options?.storeId || 0)
+      return routeStoreId || app.globalData.currentStore?.id || app.globalData.storeId || DEFAULT_STORE_ID
+    },
+
+    getCurrentStoreId(): number {
+      const storeId = this.data.storeId || this.resolveCurrentStoreId()
+      if (storeId !== this.data.storeId) {
+        this.setData({ storeId })
+      }
+      return storeId
+    },
+
     buildPricingText(space: SpaceVO) {
       if (space.pricingRuleType === 'PACKAGE') {
         return space.packageRules.map(item => `${item.hours}小时 ¥${item.price}`).join(' / ') || '按套餐计价'
@@ -211,6 +268,15 @@ Component({
         return `门票制 ¥${space.ticketPrice || 0}/人，当日不限时`
       }
       return `按时计价 ¥${space.pricePerHour || 0}/小时`
+    },
+
+    isSubmitReady(space: SpaceVO | null, selectedStart: string, selectedEnd: string): boolean {
+      if (!space || !selectedStart) return false
+      return space.pricingRuleType === 'TICKET' || !!selectedEnd
+    },
+
+    nextPageScrollTop(): number {
+      return this.data.pageScrollTop === 0 ? 1 : 0
     },
   },
 })

@@ -1,27 +1,37 @@
 <scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
   <view class="store-header">
+    <view class="store-hero-media">
+      <image wx:if="{{store.storeAvatar}}" class="store-hero-image" src="{{store.storeAvatar}}" mode="aspectFill" />
+      <view wx:else class="store-hero-placeholder">
+        <view class="badge-grid"></view>
+      </view>
+      <view class="store-hero-gradient"></view>
+    </view>
     <view class="store-info">
-      <picker mode="selector" range="{{storeNames}}" value="{{selectedStoreIndex}}" bindchange="onStoreChange">
-        <view class="store-title">
-          <text class="store-name">{{store.storeName || '桌游空间'}}</text>
-          <view class="store-switch-icon">
-            <text>⇄</text>
-          </view>
+      <view
+        class="store-title"
+        bindtap="onOpenStoreModal"
+        hover-class="store-title--pressed"
+        hover-stay-time="80"
+        aria-label="切换当前门店"
+      >
+        <text class="store-name">{{store.storeName || '桌游空间'}}</text>
+        <view class="store-switch-icon">
+          <view class="switch-chevron"></view>
         </view>
-      </picker>
+      </view>
       <view class="store-meta">
+        <text class="meta-icon meta-icon-location"></text>
         <text class="meta-item">{{store.address || '加载中...'}}</text>
       </view>
       <view class="store-meta">
+        <text class="meta-icon meta-icon-time"></text>
         <text class="meta-item">营业时间：{{store.openTime || '10:00'}}-{{store.closeTime || '22:00'}}</text>
       </view>
       <view class="store-meta">
+        <text class="meta-icon meta-icon-phone"></text>
         <text class="meta-item">电话：{{store.phone || '-'}}</text>
       </view>
-    </view>
-    <view class="store-badge">
-      <image wx:if="{{store.storeAvatar}}" class="store-avatar" src="{{store.storeAvatar}}" mode="aspectFill" />
-      <text wx:else class="badge-icon">♟</text>
     </view>
   </view>
 
@@ -31,15 +41,63 @@
       <view
         wx:for="{{quickActions}}"
         wx:key="text"
-        class="action-item"
+        class="action-item {{index === 0 ? 'action-primary' : 'action-secondary'}}"
         data-path="{{item.path}}"
         bindtap="onQuickAction"
+        hover-class="action-item--pressed"
+        hover-stay-time="80"
+        aria-label="{{item.text}}"
       >
         <view class="action-icon">
-          <text>{{item.icon}}</text>
+          <view wx:if="{{index === 0}}" class="action-glyph glyph-calendar">
+            <view class="calendar-top"></view>
+            <view class="calendar-row"></view>
+            <view class="calendar-row short"></view>
+          </view>
+          <view wx:else class="action-glyph glyph-board">
+            <view class="board-cell"></view>
+            <view class="board-cell"></view>
+            <view class="board-cell"></view>
+            <view class="board-cell"></view>
+          </view>
         </view>
         <text class="action-text">{{item.text}}</text>
       </view>
     </view>
   </view>
 </scroll-view>
+
+<view wx:if="{{showStoreModal}}" class="modal-mask" bindtap="onCloseStoreModal">
+  <view class="store-modal" catchtap="noop">
+    <view class="modal-header">
+      <view class="modal-copy">
+        <text class="modal-title">切换门店</text>
+        <text class="modal-desc">请选择本次浏览和预约使用的门店</text>
+      </view>
+      <view class="modal-close" bindtap="onCloseStoreModal" hover-class="modal-close--pressed" hover-stay-time="80" aria-label="关闭门店选择"></view>
+    </view>
+
+    <scroll-view class="store-list" scroll-y show-scrollbar="{{false}}">
+      <view
+        wx:for="{{stores}}"
+        wx:key="id"
+        class="store-option {{store && store.id === item.id ? 'selected' : ''}}"
+        data-index="{{index}}"
+        bindtap="onStoreSelect"
+        hover-class="store-option--pressed"
+        hover-stay-time="80"
+        aria-label="选择{{item.storeName}}"
+      >
+        <image wx:if="{{item.storeAvatar}}" class="store-option-avatar" src="{{item.storeAvatar}}" mode="aspectFill" />
+        <view wx:else class="store-option-mark">
+          <view class="store-option-grid"></view>
+        </view>
+        <view class="store-option-main">
+          <text class="store-option-name">{{item.storeName}}</text>
+          <text class="store-option-desc">{{item.address || '暂无地址信息'}}</text>
+        </view>
+        <view wx:if="{{store && store.id === item.id}}" class="store-option-check"></view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

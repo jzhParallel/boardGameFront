@@ -4,22 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="df955e5d-d162-4c00-a35c-ab6298c3ded3" name="更改" comment="feat(login): 添加商户选择功能到微信登录流程&#10;&#10;- 登录页新增商户选择面板，用户需先选择商户后登录&#10;- 调整微信登录接口，增加 tenantId 参数支持多租户登录&#10;- 登录流程改为先加载商户列表，用户选择后触发登录请求&#10;- 登录失败或无商户时显示相应错误提示&#10;- 优化登录状态管理，支持选择、加载、错误多状态&#10;- 退出登录时调用后端登出接口，并清理本地登录状态&#10;- 退出后重定向登录页，清空页面栈避免重复跳转&#10;- 更新请求工具，统一使用跳转封装避免重复401跳转&#10;- 调整登录页样式，优化商户选择器外观和交互体验&#10;- 新增AI助手模块文档，详细描述模块结构和设计&#10;- 补充项目根目录和模块配置索引文件，完善知识库结构">
+    <list default="true" id="df955e5d-d162-4c00-a35c-ab6298c3ded3" name="更改" comment="feat(login): 添加商户选择功能到微信登录流程&#10;&#10;- 登录页新增商户选择面板，要求用户先选择商户后进行登录&#10;- 调整微信登录接口，增加 tenantId 参数支持多租户登录&#10;- 登录流程改为先加载商户列表，用户选择后触发登录请求&#10;- 登录失败或无商户时显示相应错误提示，增强错误处理&#10;- 优化登录状态管理，支持选择、加载、错误多状态显示&#10;- 退出登录时调用后端登出接口，清理本地登录状态&#10;- 退出后重定向登录页，清空页面栈避免重复跳转&#10;- 更新请求工具，统一使用跳转封装避免重复401跳转&#10;- 调整登录页样式，优化商户选择器外观和交互体验&#10;- 新增AI助手模块文档，详细描述模块结构和设计&#10;- 补充项目根目录和模块配置索引文件，完善知识库结构">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/components/chat-bubble/chat-bubble.scss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/components/chat-bubble/chat-bubble.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/components/chat-bubble/chat-bubble.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/components/chat-bubble/chat-bubble.wxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/components/time-grid/time-grid.scss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/components/time-grid/time-grid.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/components/time-grid/time-grid.ts" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/components/time-grid/time-grid.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/components/time-grid/time-grid.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/components/time-grid/time-grid.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/pages/login/login.ts" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/login/login.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/game-detail/game-detail.ts" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/game-detail/game-detail.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/ai-assistant/ai-assistant.scss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/ai-assistant/ai-assistant.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/ai-assistant/ai-assistant.ts" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/ai-assistant/ai-assistant.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/ai-assistant/ai-assistant.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/ai-assistant/ai-assistant.wxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/home/home.scss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/home/home.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/home/home.ts" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/home/home.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/home/home.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/home/home.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/profile/profile.ts" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/profile/profile.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/reservation/reservation.scss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/reservation/reservation.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/reservation/reservation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/reservation/reservation.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/pages/user/reservation/reservation.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/user/reservation/reservation.wxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/services/space.ts" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/services/space.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/typings/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/typings/index.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +68,8 @@
       <workItem from="1785153776356" duration="111000" />
       <workItem from="1785158304115" duration="43000" />
       <workItem from="1785250479261" duration="22000" />
-      <workItem from="1785331839776" duration="648000" />
+      <workItem from="1785331839776" duration="758000" />
+      <workItem from="1785412875239" duration="1138000" />
     </task>
     <task id="LOCAL-00001" summary="feat(login): 添加商户选择功能到微信登录流程&#10;&#10;- 登录页新增商户选择面板，用户需先选择商户后登录&#10;- 调整微信登录接口，增加 tenantId 参数支持多租户登录&#10;- 登录流程改为先加载商户列表，用户选择后触发登录请求&#10;- 登录失败或无商户时显示相应错误提示&#10;- 优化登录状态管理，支持选择、加载、错误多状态&#10;- 退出登录时调用后端登出接口，并清理本地登录状态&#10;- 退出后重定向登录页，清空页面栈避免重复跳转&#10;- 更新请求工具，统一使用跳转封装避免重复401跳转&#10;- 调整登录页样式，优化商户选择器外观和交互体验&#10;- 新增AI助手模块文档，详细描述模块结构和设计&#10;- 补充项目根目录和模块配置索引文件，完善知识库结构">
       <option name="closed" value="true" />
@@ -79,7 +79,15 @@
       <option name="project" value="LOCAL" />
       <updated>1785158319916</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat(login): 添加商户选择功能到微信登录流程&#10;&#10;- 登录页新增商户选择面板，要求用户先选择商户后进行登录&#10;- 调整微信登录接口，增加 tenantId 参数支持多租户登录&#10;- 登录流程改为先加载商户列表，用户选择后触发登录请求&#10;- 登录失败或无商户时显示相应错误提示，增强错误处理&#10;- 优化登录状态管理，支持选择、加载、错误多状态显示&#10;- 退出登录时调用后端登出接口，清理本地登录状态&#10;- 退出后重定向登录页，清空页面栈避免重复跳转&#10;- 更新请求工具，统一使用跳转封装避免重复401跳转&#10;- 调整登录页样式，优化商户选择器外观和交互体验&#10;- 新增AI助手模块文档，详细描述模块结构和设计&#10;- 补充项目根目录和模块配置索引文件，完善知识库结构">
+      <option name="closed" value="true" />
+      <created>1785335085160</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1785335085160</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -98,6 +106,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat(login): 添加商户选择功能到微信登录流程&#10;&#10;- 登录页新增商户选择面板，用户需先选择商户后登录&#10;- 调整微信登录接口，增加 tenantId 参数支持多租户登录&#10;- 登录流程改为先加载商户列表，用户选择后触发登录请求&#10;- 登录失败或无商户时显示相应错误提示&#10;- 优化登录状态管理，支持选择、加载、错误多状态&#10;- 退出登录时调用后端登出接口，并清理本地登录状态&#10;- 退出后重定向登录页，清空页面栈避免重复跳转&#10;- 更新请求工具，统一使用跳转封装避免重复401跳转&#10;- 调整登录页样式，优化商户选择器外观和交互体验&#10;- 新增AI助手模块文档，详细描述模块结构和设计&#10;- 补充项目根目录和模块配置索引文件，完善知识库结构" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(login): 添加商户选择功能到微信登录流程&#10;&#10;- 登录页新增商户选择面板，用户需先选择商户后登录&#10;- 调整微信登录接口，增加 tenantId 参数支持多租户登录&#10;- 登录流程改为先加载商户列表，用户选择后触发登录请求&#10;- 登录失败或无商户时显示相应错误提示&#10;- 优化登录状态管理，支持选择、加载、错误多状态&#10;- 退出登录时调用后端登出接口，并清理本地登录状态&#10;- 退出后重定向登录页，清空页面栈避免重复跳转&#10;- 更新请求工具，统一使用跳转封装避免重复401跳转&#10;- 调整登录页样式，优化商户选择器外观和交互体验&#10;- 新增AI助手模块文档，详细描述模块结构和设计&#10;- 补充项目根目录和模块配置索引文件，完善知识库结构" />
+    <MESSAGE value="feat(login): 添加商户选择功能到微信登录流程&#10;&#10;- 登录页新增商户选择面板，要求用户先选择商户后进行登录&#10;- 调整微信登录接口，增加 tenantId 参数支持多租户登录&#10;- 登录流程改为先加载商户列表，用户选择后触发登录请求&#10;- 登录失败或无商户时显示相应错误提示，增强错误处理&#10;- 优化登录状态管理，支持选择、加载、错误多状态显示&#10;- 退出登录时调用后端登出接口，清理本地登录状态&#10;- 退出后重定向登录页，清空页面栈避免重复跳转&#10;- 更新请求工具，统一使用跳转封装避免重复401跳转&#10;- 调整登录页样式，优化商户选择器外观和交互体验&#10;- 新增AI助手模块文档，详细描述模块结构和设计&#10;- 补充项目根目录和模块配置索引文件，完善知识库结构" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(login): 添加商户选择功能到微信登录流程&#10;&#10;- 登录页新增商户选择面板，要求用户先选择商户后进行登录&#10;- 调整微信登录接口，增加 tenantId 参数支持多租户登录&#10;- 登录流程改为先加载商户列表，用户选择后触发登录请求&#10;- 登录失败或无商户时显示相应错误提示，增强错误处理&#10;- 优化登录状态管理，支持选择、加载、错误多状态显示&#10;- 退出登录时调用后端登出接口，清理本地登录状态&#10;- 退出后重定向登录页，清空页面栈避免重复跳转&#10;- 更新请求工具，统一使用跳转封装避免重复401跳转&#10;- 调整登录页样式，优化商户选择器外观和交互体验&#10;- 新增AI助手模块文档，详细描述模块结构和设计&#10;- 补充项目根目录和模块配置索引文件，完善知识库结构" />
   </component>
 </project>

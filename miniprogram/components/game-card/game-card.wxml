@@ -2,7 +2,12 @@
   <view class="cover-wrap">
     <image wx:if="{{cover}}" class="cover-img" src="{{cover}}" mode="aspectFill" />
     <view wx:else class="cover-placeholder">
-      <text class="placeholder-icon">♟</text>
+      <view class="placeholder-mark">
+        <view class="placeholder-cell"></view>
+        <view class="placeholder-cell"></view>
+        <view class="placeholder-cell"></view>
+        <view class="placeholder-cell"></view>
+      </view>
     </view>
     <view wx:if="{{category}}" class="category-tag">{{category}}</view>
   </view>
@@ -14,9 +19,10 @@
       <text class="meta-item">{{playTime}}分钟</text>
     </view>
     <view class="difficulty">
+      <text class="difficulty-label">难度</text>
       <text wx:for="{{stars}}" wx:key="index" class="star {{item ? 'filled' : ''}}">★</text>
     </view>
-    <view wx:if="{{showAsk}}" class="ask-btn" catchtap="onAsk">
+    <view wx:if="{{showAsk}}" class="ask-btn" catchtap="onAsk" hover-class="ask-btn--pressed" hover-stay-time="80" aria-label="问 AI 怎么玩">
       <text>怎么玩？</text>
     </view>
   </view>

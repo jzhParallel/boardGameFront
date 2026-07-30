@@ -2,27 +2,40 @@
 
 .page-scroll {
   height: 100vh;
-  padding-bottom: 130rpx;
+  padding-bottom: 150rpx;
+  background: $color-bg;
 }
 
 .profile-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: $spacing-xl 0;
-  background: linear-gradient(135deg, $color-primary, $color-primary-light);
+  padding: 48rpx 24rpx 42rpx;
+  margin: 24rpx 24rpx 0;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #234638 0%, $color-primary 52%, #3b6d56 100%);
+  box-shadow: 0 16rpx 32rpx rgba(45, 90, 69, 0.12);
+  box-sizing: border-box;
 }
 
 .avatar-wrap {
-  width: 120rpx;
-  height: 120rpx;
+  position: relative;
+  width: 136rpx;
+  height: 136rpx;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: $spacing-md;
+  margin-bottom: 22rpx;
   overflow: hidden;
+  border: 4rpx solid rgba(255, 255, 255, 0.28);
+  box-sizing: border-box;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+
+  &.uploading {
+    opacity: 0.72;
+  }
 }
 
 .avatar-image {
@@ -35,37 +48,143 @@
   font-size: $font-xxl;
   color: $color-text-white;
   font-weight: 700;
+  line-height: 1;
+}
+
+.avatar-edit-mark {
+  position: absolute;
+  right: 4rpx;
+  bottom: 4rpx;
+  width: 34rpx;
+  height: 34rpx;
+  border-radius: 50%;
+  background: $color-bg-card;
+  box-shadow: 0 4rpx 10rpx rgba(44, 44, 44, 0.12);
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background: $color-primary;
+  }
+
+  &::before {
+    left: 9rpx;
+    top: 16rpx;
+    width: 16rpx;
+    height: 3rpx;
+    border-radius: 3rpx;
+    transform: rotate(-35deg);
+  }
+
+  &::after {
+    left: 20rpx;
+    top: 10rpx;
+    width: 5rpx;
+    height: 5rpx;
+    border-radius: 1rpx;
+    transform: rotate(-35deg);
+  }
+}
+
+.avatar-wrap--pressed {
+  opacity: 0.88;
+  transform: scale(0.98);
 }
 
 .nickname {
   font-size: $font-xl;
   color: $color-text-white;
   font-weight: 600;
+  line-height: 1.35;
+  max-width: 520rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .avatar-tip {
-  margin-top: $spacing-xs;
+  margin-top: 8rpx;
   font-size: $font-sm;
   color: rgba(255, 255, 255, 0.82);
+  line-height: 1.4;
 }
 
 .staff-entry {
   display: flex;
   align-items: center;
-  margin: $spacing-lg;
-  padding: $spacing-lg;
+  min-height: 104rpx;
+  margin: 24rpx;
+  padding: 0 24rpx;
   background: $color-bg-card;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-sm;
+  border-radius: 20rpx;
+  border: 1rpx solid rgba(232, 226, 218, 0.86);
+  box-shadow: 0 8rpx 20rpx rgba(44, 44, 44, 0.045);
+  box-sizing: border-box;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
 
-  &:active {
-    opacity: 0.85;
-  }
+.staff-entry--pressed {
+  opacity: 0.9;
+  transform: translateY(2rpx) scale(0.99);
 }
 
 .entry-icon {
-  font-size: 40rpx;
-  margin-right: $spacing-md;
+  width: 52rpx;
+  height: 52rpx;
+  margin-right: 18rpx;
+  border-radius: 16rpx;
+  background: rgba(45, 90, 69, 0.08);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.entry-icon-workbench::before,
+.entry-icon-workbench::after,
+.entry-icon-login::before,
+.entry-icon-login::after {
+  content: '';
+  position: absolute;
+}
+
+.entry-icon-workbench::before {
+  left: 14rpx;
+  top: 15rpx;
+  width: 24rpx;
+  height: 18rpx;
+  border: 3rpx solid $color-primary;
+  border-radius: 5rpx;
+  box-sizing: border-box;
+}
+
+.entry-icon-workbench::after {
+  left: 18rpx;
+  top: 34rpx;
+  width: 16rpx;
+  height: 3rpx;
+  background: $color-primary;
+  border-radius: 3rpx;
+}
+
+.entry-icon-login::before {
+  left: 14rpx;
+  top: 22rpx;
+  width: 24rpx;
+  height: 18rpx;
+  border: 3rpx solid $color-primary;
+  border-radius: 5rpx;
+  box-sizing: border-box;
+}
+
+.entry-icon-login::after {
+  left: 20rpx;
+  top: 12rpx;
+  width: 12rpx;
+  height: 16rpx;
+  border: 3rpx solid $color-primary;
+  border-bottom: 0;
+  border-radius: 12rpx 12rpx 0 0;
+  box-sizing: border-box;
 }
 
 .entry-text {
@@ -76,51 +195,67 @@
 }
 
 .entry-arrow {
-  font-size: 40rpx;
-  color: $color-text-light;
+  width: 16rpx;
+  height: 16rpx;
+  border-right: 3rpx solid $color-text-light;
+  border-bottom: 3rpx solid $color-text-light;
+  transform: rotate(315deg);
+  flex-shrink: 0;
 }
 
 .section {
-  padding: 0 $spacing-lg;
+  padding: 0 24rpx;
 }
 
 .section-title {
   font-size: $font-lg;
   font-weight: 600;
   color: $color-text;
-  margin-bottom: $spacing-md;
+  margin-bottom: 18rpx;
+  line-height: 1.3;
 }
 
 .order-list {
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
+  gap: 18rpx;
 }
 
 .order-card {
-  padding: $spacing-md;
+  padding: 22rpx;
   background: $color-bg-card;
-  border-radius: $radius-md;
-  box-shadow: $shadow-sm;
+  border-radius: 18rpx;
+  border: 1rpx solid rgba(232, 226, 218, 0.86);
+  box-shadow: 0 8rpx 20rpx rgba(44, 44, 44, 0.04);
+  box-sizing: border-box;
 }
 
 .order-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: $spacing-sm;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
 }
 
 .order-name {
   font-size: $font-md;
   font-weight: 600;
   color: $color-text;
+  line-height: 1.35;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .order-status {
-  font-size: $font-sm;
-  padding: 4rpx 16rpx;
+  font-size: $font-xs;
+  font-weight: 600;
+  padding: 6rpx 16rpx;
   border-radius: $radius-round;
+  line-height: 1.4;
+  flex-shrink: 0;
 
   &.status-0 {
     background: rgba(82, 196, 26, 0.1);
@@ -139,24 +274,39 @@
 }
 
 .order-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
   font-size: $font-sm;
   color: $color-text-secondary;
-  margin-bottom: 4rpx;
+  margin-bottom: 8rpx;
+  line-height: 1.5;
+}
+
+.order-info-label {
+  flex-shrink: 0;
+  color: $color-text-light;
 }
 
 .logout-area {
-  padding: $spacing-xl $spacing-lg;
+  padding: 36rpx 24rpx 44rpx;
 }
 
 .logout-btn {
   text-align: center;
-  padding: $spacing-md;
+  min-height: 84rpx;
+  line-height: 84rpx;
   color: $color-error;
   font-size: $font-md;
+  font-weight: 500;
   background: $color-bg-card;
-  border-radius: $radius-md;
+  border-radius: 18rpx;
+  border: 1rpx solid rgba(255, 77, 79, 0.14);
+  box-sizing: border-box;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
 
-  &:active {
-    opacity: 0.7;
-  }
+.logout-btn--pressed {
+  opacity: 0.78;
+  transform: scale(0.99);
 }

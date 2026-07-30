@@ -1,38 +1,101 @@
 <view class="login-page">
-  <!-- 品牌区域 -->
-  <view class="login-brand">
-    <view class="brand-icon">🎲</view>
-    <view class="brand-name">桌游空间</view>
-    <view class="brand-desc">发现桌游乐趣，预约你的专属空间</view>
-  </view>
-
-  <!-- 商户选择 -->
-  <view class="tenant-panel" wx:if="{{status === 'selecting'}}">
-    <view class="tenant-label">选择商户</view>
-    <picker mode="selector" range="{{tenantNames}}" value="{{selectedTenantIndex}}" bindchange="onTenantChange">
-      <view class="tenant-picker {{selectedTenantId ? 'selected' : ''}}">
-        <text>{{selectedTenantName || '请选择要登录的商户'}}</text>
-        <text class="picker-arrow">›</text>
+  <view class="login-shell">
+    <view class="login-brand">
+      <view class="brand-mark">
+        <view class="brand-mark-line brand-mark-line--top"></view>
+        <view class="brand-mark-line brand-mark-line--middle"></view>
+        <view class="brand-mark-line brand-mark-line--bottom"></view>
       </view>
-    </picker>
-    <button class="login-btn" bindtap="doLogin" disabled="{{!selectedTenantId}}">微信登录</button>
+      <view class="brand-copy">
+        <text class="brand-name">桌游空间</text>
+        <text class="brand-desc">选择门店所属商户后登录，快速进入预约服务</text>
+      </view>
+    </view>
+
+    <view class="tenant-panel" wx:if="{{status === 'selecting'}}">
+      <view class="section-heading">
+        <text class="section-title">登录前请选择商户</text>
+        <text class="section-desc">系统将按所选商户展示对应门店与预约信息</text>
+      </view>
+
+      <view
+        class="tenant-picker {{selectedTenantId ? 'selected' : ''}}"
+        bindtap="onOpenTenantModal"
+        hover-class="tenant-picker--pressed"
+        hover-stay-time="80"
+        aria-label="选择商户"
+      >
+        <view class="tenant-picker-main">
+          <text class="tenant-picker-label">当前商户</text>
+          <text class="tenant-picker-value">{{selectedTenantName || '请选择要登录的商户'}}</text>
+        </view>
+        <view class="picker-arrow"></view>
+      </view>
+
+      <view wx:if="{{errorMsg}}" class="login-inline-error">
+        <text>{{errorMsg}}</text>
+      </view>
+
+      <button
+        class="login-btn {{selectedTenantId ? 'active' : ''}}"
+        bindtap="doLogin"
+        disabled="{{!selectedTenantId}}"
+        hover-class="login-btn--pressed"
+        hover-stay-time="80"
+        aria-label="微信登录"
+      >
+        <text>微信登录</text>
+      </button>
+    </view>
+
+    <view class="login-status" wx:elif="{{status === 'loading'}}">
+      <view class="loading-spinner"></view>
+      <text class="status-title">正在登录</text>
+      <text class="status-text">请稍候，正在为你加载门店信息</text>
+    </view>
+
+    <view class="login-status" wx:elif="{{status === 'error'}}">
+      <view class="error-mark"></view>
+      <text class="status-title">登录遇到问题</text>
+      <text class="status-text error-text">{{errorMsg}}</text>
+      <button class="retry-btn" bindtap="onRetry" hover-class="retry-btn--pressed" hover-stay-time="80" aria-label="重新登录">
+        <text>重新登录</text>
+      </button>
+    </view>
   </view>
 
-  <!-- 登录中状态 -->
-  <view class="login-status" wx:elif="{{status === 'loading'}}">
-    <view class="loading-spinner"></view>
-    <text class="status-text">正在微信登录中...</text>
-  </view>
-
-  <!-- 登录失败状态 -->
-  <view class="login-status" wx:elif="{{status === 'error'}}">
-    <view class="error-icon">⚠️</view>
-    <text class="status-text error-text">{{errorMsg}}</text>
-    <button class="retry-btn" bindtap="onRetry">重新登录</button>
-  </view>
-
-  <!-- 底部提示 -->
   <view class="login-footer">
     <text class="footer-text">登录即代表同意用户协议与隐私政策</text>
+  </view>
+
+  <view wx:if="{{showTenantModal}}" class="modal-mask" bindtap="onCloseTenantModal">
+    <view class="tenant-modal" catchtap="noop">
+      <view class="modal-header">
+        <view class="modal-copy">
+          <text class="modal-title">选择商户</text>
+          <text class="modal-desc">请选择本次登录要进入的商户</text>
+        </view>
+        <view class="modal-close" bindtap="onCloseTenantModal" hover-class="modal-close--pressed" hover-stay-time="80" aria-label="关闭商户选择"></view>
+      </view>
+
+      <scroll-view class="tenant-list" scroll-y show-scrollbar="{{false}}">
+        <view
+          wx:for="{{tenants}}"
+          wx:key="id"
+          class="tenant-option {{selectedTenantId === item.id ? 'selected' : ''}}"
+          data-index="{{index}}"
+          bindtap="onTenantSelect"
+          hover-class="tenant-option--pressed"
+          hover-stay-time="80"
+          aria-label="选择{{item.tenantName}}"
+        >
+          <view class="tenant-option-main">
+            <text class="tenant-option-name">{{item.tenantName}}</text>
+            <text class="tenant-option-desc">登录后展示该商户下的门店服务</text>
+          </view>
+          <view wx:if="{{selectedTenantId === item.id}}" class="tenant-option-check"></view>
+        </view>
+      </scroll-view>
+    </view>
   </view>
 </view>

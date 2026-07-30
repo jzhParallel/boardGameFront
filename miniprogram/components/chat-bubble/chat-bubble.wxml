@@ -3,16 +3,14 @@
     <text>AI</text>
   </view>
   <view class="bubble {{role}} {{type}}">
-    <!-- 加载态 -->
     <view wx:if="{{type === 'loading'}}" class="loading-dots">
       <view class="dot"></view>
       <view class="dot"></view>
       <view class="dot"></view>
+      <text class="loading-text">正在整理答案</text>
     </view>
-    <!-- 文本 -->
     <text wx:elif="{{type === 'text'}}" class="text-content">{{content}}</text>
-    <!-- 推荐卡片 -->
-    <view wx:elif="{{type === 'card'}}" class="game-recommend" bindtap="onCardTap">
+    <view wx:elif="{{type === 'card'}}" class="game-recommend" bindtap="onCardTap" hover-class="game-recommend--pressed" hover-stay-time="80" aria-label="查看推荐桌游">
       <text class="rec-label">推荐桌游</text>
       <view class="rec-info">
         <text class="rec-name">{{gameName}}</text>
@@ -21,10 +19,17 @@
           <text wx:if="{{gameDifficulty}}">难度 {{gameDifficulty}}/5</text>
         </view>
       </view>
-      <text class="rec-arrow">›</text>
+      <view class="rec-arrow"></view>
     </view>
   </view>
   <view wx:if="{{role === 'user'}}" class="avatar user-avatar">
-    <text>我</text>
+    <image
+      wx:if="{{userAvatar && !avatarBroken}}"
+      class="avatar-image"
+      src="{{userAvatar}}"
+      mode="aspectFill"
+      binderror="onAvatarError"
+    />
+    <text wx:else>我</text>
   </view>
 </view>

@@ -1,7 +1,8 @@
 import { wxLogin } from '../../services/auth'
 import { getStoreList, Store } from '../../services/store'
 import { getTenantList, Tenant } from '../../services/tenant'
-import { isLoggedIn, getUserInfo } from '../../utils/auth'
+import { DEFAULT_STORE_ID } from '../../config'
+import { isLoggedIn, getUserInfo, clearToken } from '../../utils/auth'
 
 const app = getApp<IAppOption>()
 
@@ -15,6 +16,7 @@ Page({
     selectedTenantIndex: 0,
     selectedTenantId: 0,
     selectedTenantName: '',
+    showTenantModal: false,
   },
 
   async onLoad() {
@@ -42,10 +44,7 @@ Page({
           this.loadTenants()
           return
         }
-        this.setData({
-          status: 'error',
-          errorMsg: err?.message || '加载店铺列表失败，请重试',
-        })
+        await this.restoreTenantSelectionAfterStoreError(err, false)
       }
       return
     }
@@ -65,6 +64,7 @@ Page({
         selectedTenantIndex: 0,
         selectedTenantId: 0,
         selectedTenantName: '',
+        showTenantModal: false,
       })
       if (tenants.length === 0) {
         this.setData({
@@ -81,6 +81,35 @@ Page({
     }
   },
 
+  onOpenTenantModal() {
+    if (this.data.tenants.length === 0) {
+      wx.showToast({ title: '暂无可选择商户', icon: 'none' })
+      return
+    }
+    this.setData({ showTenantModal: true })
+  },
+
+  onCloseTenantModal() {
+    this.setData({ showTenantModal: false })
+  },
+
+  noop() {},
+
+  onTenantSelect(e: WechatMiniprogram.BaseEvent) {
+    const index = Number(e.currentTarget.dataset.index)
+    const tenant = this.data.tenants[index]
+    if (!tenant) {
+      return
+    }
+    this.setData({
+      selectedTenantIndex: index + 1,
+      selectedTenantId: tenant.id,
+      selectedTenantName: tenant.tenantName,
+      errorMsg: '',
+      showTenantModal: false,
+    })
+  },
+
   /** 选择商户 */
   onTenantChange(e: WechatMiniprogram.CustomEvent<{ value: string }>) {
     const index = Number(e.detail.value)
@@ -89,6 +118,7 @@ Page({
         selectedTenantIndex: 0,
         selectedTenantId: 0,
         selectedTenantName: '',
+        errorMsg: '',
       })
       return
     }
@@ -100,6 +130,7 @@ Page({
       selectedTenantIndex: index,
       selectedTenantId: tenant.id,
       selectedTenantName: tenant.tenantName,
+      errorMsg: '',
     })
   },
 
@@ -133,14 +164,43 @@ Page({
       this.navigateAfterLogin()
     } catch (err: any) {
       console.error('登录失败:', err)
-      this.setData({
-        status: 'error',
-        errorMsg: err?.message || '登录失败，请重试',
-      })
+      await this.restoreTenantSelectionAfterStoreError(err, true)
     }
   },
 
   /** 获取当前商户第一个店铺 */
+  async restoreTenantSelectionAfterStoreError(err: any, keepSelectedTenant: boolean) {
+    const errorMsg = err?.message || '登录后加载店铺列表失败，请选择其他商户或稍后重试'
+    this.clearFailedLoginState()
+
+    if (this.data.tenants.length === 0) {
+      await this.loadTenants()
+      if (this.data.status !== 'selecting') {
+        return
+      }
+    }
+
+    this.setData({
+      status: 'selecting',
+      errorMsg,
+      showTenantModal: false,
+      ...(keepSelectedTenant
+        ? {}
+        : {
+            selectedTenantIndex: 0,
+            selectedTenantId: 0,
+            selectedTenantName: '',
+          }),
+    })
+  },
+
+  clearFailedLoginState() {
+    clearToken()
+    app.globalData.userInfo = null
+    app.globalData.currentStore = null
+    app.globalData.storeId = DEFAULT_STORE_ID
+  },
+
   async loadFirstStore() {
     const stores = await getStoreList()
     const firstStore = stores[0]

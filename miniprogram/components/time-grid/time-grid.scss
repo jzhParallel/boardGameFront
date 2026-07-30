@@ -1,34 +1,48 @@
 @import '../../styles/variables.scss';
 
 .time-grid {
+  display: flex;
+  flex-direction: column;
+  height: 61vh;
+  min-height: 635rpx;
+  max-height: 780rpx;
   background: $color-bg-card;
-  border-radius: $radius-lg;
-  padding: $spacing-lg;
+  border-radius: 20rpx;
+  padding: 22rpx;
+  border: 1rpx solid rgba(232, 226, 218, 0.85);
+  box-shadow: 0 8rpx 20rpx rgba(44, 44, 44, 0.04);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .grid-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+  align-items: flex-start;
   gap: 12rpx;
-  margin-bottom: $spacing-md;
+  margin-bottom: 16rpx;
+  flex-shrink: 0;
 }
 
 .hint {
   font-size: $font-sm;
   color: $color-text-secondary;
+  line-height: 1.45;
+  flex: 1;
 }
 
 .legend {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16rpx;
+  flex-direction: column;
+  gap: 8rpx;
+  width: 156rpx;
+  flex-shrink: 0;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
+  min-height: 30rpx;
   font-size: $font-xs;
   color: $color-text-light;
 
@@ -38,9 +52,10 @@
 }
 
 .dot {
-  width: 16rpx;
-  height: 16rpx;
-  border-radius: 4rpx;
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 6rpx;
+  box-sizing: border-box;
 
   &.available {
     background: #E8F5E9;
@@ -50,6 +65,11 @@
   &.occupied {
     background: #EEEEEE;
     border: 1rpx solid #CCCCCC;
+  }
+
+  &.expired {
+    background: #F1F1F1;
+    border: 1rpx solid #D8D8D8;
   }
 
   &.reserved {
@@ -62,34 +82,46 @@
   }
 }
 
+.grid-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .grid-body {
   display: flex;
   flex-wrap: wrap;
   gap: 12rpx;
+  padding-bottom: 4rpx;
 }
 
 .slot {
   width: calc(25% - 9rpx);
-  padding: 16rpx 0;
+  min-height: 70rpx;
+  line-height: 70rpx;
   text-align: center;
-  border-radius: $radius-sm;
+  border-radius: 16rpx;
   font-size: $font-sm;
-  transition: all 0.15s;
+  font-weight: 500;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  box-sizing: border-box;
 
   &.available {
-    background: #E8F5E9;
+    background: rgba(45, 90, 69, 0.07);
     color: $color-primary;
-    border: 1rpx solid rgba(45, 90, 69, 0.3);
-
-    &:active {
-      transform: scale(0.95);
-    }
+    border: 1rpx solid rgba(45, 90, 69, 0.18);
   }
 
   &.occupied {
-    background: #F5F5F5;
-    color: #CCCCCC;
-    border: 1rpx solid #EEEEEE;
+    background: #F1F1F1;
+    color: #B9B9B9;
+    border: 1rpx solid #E6E6E6;
+  }
+
+  &.expired {
+    background: #F1F1F1;
+    color: #B9B9B9;
+    border: 1rpx solid #E6E6E6;
   }
 
   &.reserved {
@@ -105,11 +137,34 @@
   }
 }
 
+.slot--pressed {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.slot.occupied.slot--pressed,
+.slot.expired.slot--pressed,
+.slot.reserved.slot--pressed {
+  opacity: 1;
+  transform: none;
+}
+
 .selection-info {
-  margin-top: $spacing-md;
-  padding-top: $spacing-md;
-  border-top: 1rpx solid $color-divider;
+  display: flex;
+  align-items: center;
+  min-height: 66rpx;
+  margin-top: 14rpx;
+  padding: 12rpx 18rpx;
+  border-radius: 16rpx;
+  background: rgba(45, 90, 69, 0.07);
   font-size: $font-md;
   color: $color-primary;
-  font-weight: 500;
+  font-weight: 600;
+  line-height: 1.35;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.selection-info.empty {
+  visibility: hidden;
 }

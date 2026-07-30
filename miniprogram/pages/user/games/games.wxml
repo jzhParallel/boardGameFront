@@ -1,15 +1,19 @@
 <scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}" bindscrolltolower="onReachBottom">
   <!-- 搜索栏 -->
   <view class="search-bar">
-    <view class="search-input-wrap">
-      <text class="search-icon">🔍</text>
+    <view class="search-input-wrap {{searchFocused ? 'focused' : ''}}">
+      <view class="search-icon"></view>
       <input
         class="search-input"
         placeholder="搜索桌游名称..."
         value="{{keyword}}"
         bindinput="onSearchInput"
         bindconfirm="onSearch"
+        bindfocus="onSearchFocus"
+        bindblur="onSearchBlur"
         confirm-type="search"
+        cursor-spacing="24"
+        aria-label="搜索桌游名称"
       />
     </view>
   </view>
@@ -23,6 +27,8 @@
         class="category-item {{category === item ? 'active' : ''}}"
         data-cat="{{item}}"
         bindtap="onCategoryTap"
+        hover-class="category-item--pressed"
+        hover-stay-time="80"
       >
         <text>{{item}}</text>
       </view>
@@ -31,7 +37,7 @@
 
   <!-- 桌游网格 -->
   <view class="games-grid">
-    <view wx:for="{{games}}" wx:key="id" class="game-item" data-id="{{item.id}}" bindtap="onGameTap">
+    <view wx:for="{{games}}" wx:key="id" class="game-item" data-id="{{item.id}}" bindtap="onGameTap" hover-class="game-item--pressed" hover-stay-time="80">
       <game-card
         name="{{item.gameName}}"
         cover="{{item.coverImage}}"
@@ -47,7 +53,7 @@
   </view>
 
   <!-- 空状态 -->
-  <empty-state wx:if="{{!games.length && !loading}}" text="暂无桌游，敬请期待~" icon="🎲" />
+  <empty-state wx:if="{{!games.length && !loading}}" text="暂无桌游，敬请期待" icon="□" />
 
   <!-- 加载状态 -->
   <view wx:if="{{loading}}" class="loading-tip">

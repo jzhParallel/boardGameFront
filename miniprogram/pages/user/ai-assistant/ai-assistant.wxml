@@ -1,7 +1,8 @@
 <view class="chat-page">
   <!-- 顶部提示 -->
   <view class="disclaimer">
-    <text>AI解答仅供参考，具体规则以店内说明为准</text>
+    <view class="disclaimer-mark"></view>
+    <text>AI 解答仅供参考，具体规则以店内说明为准</text>
   </view>
 
   <!-- 消息列表 -->
@@ -20,6 +21,7 @@
         type="{{item.type}}"
         role="{{item.role}}"
         content="{{item.content}}"
+        user-avatar="{{userAvatar}}"
         game-name="{{item.gameName}}"
         game-players="{{item.gamePlayers}}"
         game-difficulty="{{item.gameDifficulty}}"
@@ -33,16 +35,25 @@
     <view class="input-wrap">
       <input
         class="msg-input"
-        placeholder="问我任何桌游问题..."
+        placeholder="{{isTyping ? 'AI 正在整理答案...' : '问我桌游规则、推荐或位置'}}"
         value="{{inputValue}}"
         bindinput="onInput"
         bindconfirm="onSend"
         confirm-type="send"
         disabled="{{isTyping}}"
+        cursor-spacing="24"
+        aria-label="输入桌游问题"
       />
-      <view class="send-btn {{inputValue && !isTyping ? 'active' : ''}}" bindtap="onSend">
-        <text>发送</text>
-      </view>
+      <button
+        class="send-btn {{canSend ? 'active' : ''}} {{isTyping ? 'typing' : ''}}"
+        bindtap="onSend"
+        disabled="{{!canSend}}"
+        hover-class="send-btn--pressed"
+        hover-stay-time="80"
+        aria-label="发送问题"
+      >
+        <text>{{isTyping ? '等待' : '发送'}}</text>
+      </button>
     </view>
   </view>
 </view>

@@ -1,4 +1,6 @@
 import { getAiReply, streamReply } from '../../../mock/ai'
+import { getUserInfo } from '../../../utils/auth'
+import { resolveAssetUrl } from '../../../utils/asset'
 
 interface Message {
   id: number
@@ -14,18 +16,21 @@ Component({
   data: {
     messages: [] as Message[],
     inputValue: '',
+    canSend: false,
     isTyping: false,
     msgId: 0,
     scrollTop: 0,
+    userAvatar: '',
   },
 
   lifetimes: {
     attached() {
-      // 欢迎消息
+      this.loadUserAvatar()
       this.addMessage({
         role: 'ai',
         type: 'text',
-        content: '你好！我是桌游小助手 🎲\n\n我可以帮你：\n• 解答桌游规则\n• 推荐适合的桌游\n• 告诉你桌游在店里的位置\n\n试着问我"卡坦岛怎么玩"或"推荐几款桌游"吧！',
+        content:
+          '你好，我是桌游小助手。\n\n你可以直接问我：\n- 桌游规则怎么理解\n- 哪款桌游适合几个人玩\n- 桌游在店里的位置\n\n比如试试“卡坦岛怎么玩”或“推荐两人桌游”。',
       })
     },
   },
@@ -35,7 +40,8 @@ Component({
       if (typeof this.getTabBar === 'function' && this.getTabBar()) {
         this.getTabBar().setData({ selected: 1 })
       }
-      // 检查是否有从其他页面传来的问题
+      this.loadUserAvatar()
+
       const app = getApp()
       const question = (app.globalData as any).aiQuestion
       if (question) {
@@ -46,6 +52,11 @@ Component({
   },
 
   methods: {
+    loadUserAvatar() {
+      const info = getUserInfo()
+      this.setData({ userAvatar: resolveAssetUrl(info?.avatar) })
+    },
+
     addMessage(msg: Omit<Message, 'id'>) {
       const id = this.data.msgId + 1
       const messages = [...this.data.messages, { ...msg, id }]
@@ -69,24 +80,23 @@ Component({
     },
 
     onInput(e: any) {
-      this.setData({ inputValue: e.detail.value })
+      const inputValue = e.detail.value
+      this.setData({
+        inputValue,
+        canSend: !!inputValue.trim() && !this.data.isTyping,
+      })
     },
 
     handleSend(text?: string) {
-      const content = text || this.data.inputValue.trim()
+      const content = (text || this.data.inputValue).trim()
       if (!content || this.data.isTyping) return
 
-      // 添加用户消息
       this.addMessage({ role: 'user', type: 'text', content })
-      this.setData({ inputValue: '', isTyping: true })
-
-      // 显示加载态
+      this.setData({ inputValue: '', canSend: false, isTyping: true })
       this.addMessage({ role: 'ai', type: 'loading', content: '' })
 
-      // 模拟延迟后开始流式回复
       setTimeout(() => {
         const reply = getAiReply(content)
-        // 替换 loading 为文本
         const messages = [...this.data.messages]
         messages[messages.length - 1] = {
           ...messages[messages.length - 1],
@@ -95,7 +105,6 @@ Component({
         }
         this.setData({ messages })
 
-        // 流式输出
         streamReply(
           reply.reply,
           (partial) => {
@@ -103,7 +112,6 @@ Component({
             this.scrollToBottom()
           },
           () => {
-            // 如果有推荐卡片，追加一条
             if (reply.game) {
               this.addMessage({
                 role: 'ai',
@@ -114,7 +122,10 @@ Component({
                 gameDifficulty: reply.game.difficulty,
               })
             }
-            this.setData({ isTyping: false })
+            this.setData({
+              isTyping: false,
+              canSend: !!this.data.inputValue.trim(),
+            })
           }
         )
       }, 800)
@@ -126,7 +137,7 @@ Component({
 
     onCardTap(e: any) {
       const { name } = e.detail
-      wx.showToast({ title: `查看「${name}」详情`, icon: 'none' })
+      wx.showToast({ title: `查看《${name}》详情`, icon: 'none' })
     },
   },
 })

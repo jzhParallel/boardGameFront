@@ -8,6 +8,7 @@
       <view class="legend-item"><view class="dot selected"></view><text>我已选择</text></view>
     </view>
   </view>
+  <scroll-view class="grid-scroll" scroll-y enhanced show-scrollbar="{{false}}">
   <view class="grid-body">
     <view
       wx:for="{{slots}}"
@@ -15,11 +16,14 @@
       class="slot {{item.status}}"
       data-index="{{index}}"
       bindtap="onSlotTap"
+      hover-class="slot--pressed"
+      hover-stay-time="80"
     >
       <text>{{item.time}}</text>
     </view>
   </view>
-  <view wx:if="{{selectedStart}}" class="selection-info">
+  </scroll-view>
+  <view class="selection-info {{selectedStart ? '' : 'empty'}}">
     <text>我已选择：{{selectedStart}} - {{selectedEnd || '请选择结束时段'}}</text>
   </view>
 </view>

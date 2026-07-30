@@ -1,6 +1,6 @@
 interface TimeSlot {
   time: string
-  status: 'available' | 'occupied' | 'reserved' | 'selected'
+  status: 'available' | 'occupied' | 'reserved' | 'expired' | 'selected'
 }
 
 Component({
@@ -9,6 +9,8 @@ Component({
     startTime: { type: String, value: '10:00' },
     /** 营业结束时间 如 "22:00" */
     endTime: { type: String, value: '22:00' },
+    /** 当前选择日期 YYYY-MM-DD */
+    selectedDate: { type: String, value: '' },
     /** 已占用时段列表 如 ["10:00","10:30"] */
     occupiedSlots: { type: Array, value: [] as string[] },
     /** 我的已预约时段列表 如 ["10:00","10:30"] */
@@ -25,7 +27,7 @@ Component({
     },
   },
   observers: {
-    'occupiedSlots, myReservedSlots, startTime, endTime'() {
+    'occupiedSlots, myReservedSlots, selectedDate, startTime, endTime'() {
       this.generateSlots()
     },
   },
@@ -44,9 +46,10 @@ Component({
         const time = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
         const isOccupied = (occupiedSlots as string[]).includes(time)
         const isReserved = (myReservedSlots as string[]).includes(time)
+        const isExpired = this.isExpiredSlot(time)
         slots.push({
           time,
-          status: isReserved ? 'reserved' : isOccupied ? 'occupied' : 'available',
+          status: isExpired ? 'expired' : isReserved ? 'reserved' : isOccupied ? 'occupied' : 'available',
         })
         current += 30
       }
@@ -58,7 +61,7 @@ Component({
       const slots = [...this.data.slots]
       const slot = slots[index]
 
-      if (slot.status === 'occupied' || slot.status === 'reserved') return
+      if (this.isBlockedSlot(slot.status)) return
 
       // 如果没选开始，或已经选了连续段，重新开始选
       if (!this.data.selectedStart || this.data.selectedEnd) {
@@ -78,7 +81,7 @@ Component({
       const from = Math.min(startIdx, index)
       const to = Math.max(startIdx, index)
       for (let i = from; i <= to; i++) {
-        if (slots[i].status === 'occupied' || slots[i].status === 'reserved') {
+        if (this.isBlockedSlot(slots[i].status)) {
           wx.showToast({ title: '所选时段包含不可预约时间', icon: 'none' })
           return
         }
@@ -102,6 +105,34 @@ Component({
 
       this.setData({ slots, selectedEnd: endStr })
       this.triggerEvent('change', { start: this.data.selectedStart, end: endStr })
+    },
+
+    isBlockedSlot(status: TimeSlot['status']): boolean {
+      return status === 'occupied' || status === 'reserved' || status === 'expired'
+    },
+
+    isExpiredSlot(time: string): boolean {
+      if (!this.isToday(this.data.selectedDate)) return false
+      return this.timeToMinutes(time) < this.getCurrentMinutes()
+    },
+
+    isToday(date: string): boolean {
+      if (!date) return false
+      const now = new Date()
+      const y = now.getFullYear()
+      const m = (now.getMonth() + 1).toString().padStart(2, '0')
+      const d = now.getDate().toString().padStart(2, '0')
+      return date === `${y}-${m}-${d}`
+    },
+
+    getCurrentMinutes(): number {
+      const now = new Date()
+      return now.getHours() * 60 + now.getMinutes()
+    },
+
+    timeToMinutes(time: string): number {
+      const [h, m] = time.split(':').map(Number)
+      return h * 60 + m
     },
   },
 })
