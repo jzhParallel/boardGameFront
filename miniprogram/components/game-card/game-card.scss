@@ -1,6 +1,8 @@
 @import '../../styles/variables.scss';
 
 .game-card {
+  display: block;
+  width: 100%;
   background: $color-bg-card;
   border-radius: 20rpx;
   overflow: hidden;

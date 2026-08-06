@@ -104,12 +104,17 @@
 .games-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 18rpx;
+  justify-content: space-between;
   padding: 18rpx 24rpx;
+  box-sizing: border-box;
 }
 
 .game-item {
+  flex: 0 0 calc(50% - 9rpx);
   width: calc(50% - 9rpx);
+  max-width: calc(50% - 9rpx);
+  margin-bottom: 18rpx;
+  box-sizing: border-box;
   transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
